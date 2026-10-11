@@ -19,25 +19,26 @@
 <div id="auth" class="authscreen">
   <div class="authbox">
     <div class="logo" style="margin:auto">T</div>
-    <h1>Entrar no TREINO ZEDRAX</h1>
-    <p class="muted">Use seu e-mail e senha para sincronizar seus treinos em celular e computador.</p>
-    <div id="authForm" class="authform">
-      <label>E-mail<input id="authEmail" type="email" autocomplete="email" placeholder="seu@email.com"></label>
-      <label>Senha<input id="authPassword" type="password" autocomplete="current-password" placeholder="Sua senha"></label>
-      <button class="btn primary" onclick="signIn()">Entrar</button>
-      <button class="btn" onclick="resetPassword()">Esqueci a senha</button>
+    <div id="loginBox">
+      <h1>Entrar no TREINO ZEDRAX</h1>
+      <p class="muted">Use seu e-mail e senha para sincronizar seus treinos em celular e computador.</p>
+      <div id="authForm" class="authform">
+        <label>E-mail<input id="authEmail" type="email" autocomplete="email" placeholder="seu@email.com"></label>
+        <label>Senha<input id="authPassword" type="password" autocomplete="current-password" placeholder="Sua senha"></label>
+        <button class="btn primary" onclick="signIn()">Entrar</button>
+      </div>
+      <div class="authswitch"><button class="btn" onclick="resetPassword()">Esqueci a senha</button><button class="btn" onclick="showRegister()">Criar conta</button></div>
     </div>
-    <div class="authswitch"><button class="btn" onclick="showRegister()">Criar conta</button></div>
     <div id="registerBox" class="hidden">
-      <h2>Criar conta</h2>
-      <p class="muted">Crie uma conta comum. O acesso de administrador é reservado.</p>
+      <h1>Criar conta</h1>
+      <p class="muted">Crie sua conta diretamente pelo TREINO ZEDRAX. O acesso de administrador é reservado.</p>
       <div class="authform">
         <label>Nome<input id="regName" type="text" autocomplete="name" placeholder="Seu nome"></label>
         <label>E-mail<input id="regEmail" type="email" autocomplete="email" placeholder="seu@email.com"></label>
         <label>Senha<input id="regPass" type="password" autocomplete="new-password" placeholder="Mínimo de 6 caracteres"></label>
         <label>Confirmar senha<input id="regPass2" type="password" autocomplete="new-password" placeholder="Repita sua senha"></label>
         <button class="btn primary" onclick="registerUser()">Criar conta</button>
-        <button class="btn" onclick="showLogin()">Já tenho uma conta</button>
+        <button class="btn" onclick="showLogin()">Voltar para entrar</button>
       </div>
     </div>
     <div id="authMsg" class="authmsg"></div>
@@ -68,14 +69,13 @@ const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 let currentUser=null,currentProfile=null,syncTimer=null;
 const P={homem:[['A','Treino A','Pernas • Peito • Costas • Braços',[['Leg press','3 x 10–12'],['Supino máquina','3 x 10–12'],['Puxada na frente','3 x 10–12'],['Mesa flexora','2 x 12–15'],['Rosca na polia','2 x 12'],['Tríceps na polia','2 x 12'],['Elevação lateral','2 x 12–15']]],['D','Condicionamento + abdômen','Cardio • Core • Panturrilha',[['Bike ou elíptico','20–25 min'],['Abdominal máquina','2 x 12–15'],['Prancha','2 x 20–30 s'],['Panturrilha máquina','3 x 12–15']]],['B','Treino B','Pernas • Peito • Costas • Ombros',[['Leg press','3 x 10–12'],['Supino inclinado máquina','3 x 10–12'],['Remada baixa','3 x 10–12'],['Cadeira extensora','2 x 12–15'],['Desenvolvimento máquina','2 x 10–12'],['Crucifixo inverso','2 x 12–15'],['Rosca Scott','2 x 12']]],['E','Ombros + braços + abdômen','Ombros • Braços • Core',[['Elevação lateral','3 x 12–15'],['Crucifixo inverso','2 x 12–15'],['Rosca na polia','2 x 12'],['Tríceps corda','2 x 12'],['Abdominal máquina','2 x 12–15'],['Caminhada inclinada ou bike','20–25 min']]],['C','Treino C','Pernas • Peito • Costas • Tríceps • Core',[['Leg press','3 x 10–12'],['Supino máquina','3 x 10–12'],['Puxada neutra','3 x 10–12'],['Mesa flexora','2 x 12–15'],['Tríceps na polia','2 x 12'],['Abdominal máquina','2 x 12–15'],['Prancha','2 x 20–30 s']]]],
 mulher:[['A','Treino A','Pernas • Glúteos • Peito • Costas',[['Leg press','3 x 10–12'],['Hip thrust máquina','3 x 10–12'],['Puxada na frente','3 x 10–12'],['Supino máquina','3 x 10–12'],['Mesa flexora','2 x 12–15'],['Elevação lateral','2 x 12–15']]],['D','Condicionamento + abdômen','Cardio • Core • Panturrilha',[['Bike ou elíptico','20–25 min'],['Abdominal máquina','2 x 12–15'],['Prancha','2 x 20–30 s'],['Panturrilha máquina','3 x 12–15']]],['B','Treino B','Pernas • Glúteos • Costas • Ombros',[['Agachamento no smith','3 x 10–12'],['Cadeira extensora','2 x 12–15'],['Cadeira abdutora','3 x 12–15'],['Remada baixa','3 x 10–12'],['Desenvolvimento máquina','2 x 10–12'],['Mesa flexora','2 x 12–15']]],['E','Ombros + braços + abdômen','Ombros • Braços • Core',[['Elevação lateral','3 x 12–15'],['Crucifixo inverso','2 x 12–15'],['Rosca na polia','2 x 12'],['Tríceps corda','2 x 12'],['Abdominal máquina','2 x 12–15'],['Caminhada inclinada ou bike','20–25 min']]],['C','Treino C','Glúteos • Pernas • Peito • Costas • Core',[['Hip thrust máquina','3 x 10–12'],['Leg press','3 x 10–12'],['Puxada neutra','3 x 10–12'],['Afundo no smith','2 x 10–12'],['Supino máquina','3 x 10–12'],['Abdominal máquina','2 x 12–15']]]]};
-function userStorageKey(){return currentUser?'meuTreinoV4_'+currentUser.id:'meuTreinoV4_guest'}
-let profile=localStorage.getItem('perfilTreino')||'',off=0,sel=0,db=JSON.parse(localStorage.getItem('meuTreinoV4_guest')||'{}');
+let profile=localStorage.getItem('perfilTreino')||'',off=0,sel=0,db=JSON.parse(localStorage.getItem('meuTreinoV4')||'{}');
 function migrateCheckRecords(){
   Object.keys(db).forEach(k=>{
     if(k.startsWith('check-')){
       let date=k.slice(6),m=db[k];
       if(/^\d{4}-\d\d-\d\d$/.test(date)&&m){
-        let d=db[date]||{code:plans()[new Date(date+'T12:00:00').getDay()-1]?.[0]||plans()[0][0],sets:{},notes:'',done:false,custom:[],removed:[]};
+        let basePlans=P[profile]||P.homem;let weekday=new Date(date+'T12:00:00').getDay()-1;let d=db[date]||{code:basePlans[weekday>=0&&weekday<5?weekday:0][0],sets:{},notes:'',done:false,custom:[],removed:[]};
         if(m.weight!=null)d.weight=Number(m.weight);
         if(m.waist!=null)d.waist=Number(m.waist);
         db[date]=d;
@@ -83,17 +83,17 @@ function migrateCheckRecords(){
       delete db[k];
     }
   });
-  localStorage.setItem(userStorageKey(),JSON.stringify(db));
+  localStorage.setItem('meuTreinoV4',JSON.stringify(db));
 }
 migrateCheckRecords();
 function plans(){return P[profile]||P.homem}
 function mon(){let d=new Date();d.setHours(12,0,0,0);let x=d.getDay();d.setDate(d.getDate()+(x===0?-6:1-x)+off*7);return d}
 function dt(i){let d=mon();d.setDate(d.getDate()+i);return d}
 function key(i){return dt(i).toISOString().slice(0,10)}
-function ensureDay(i){let k=key(i),q=plans();if(!db[k])db[k]={code:q[i][0],sets:{},notes:'',done:false,custom:[],removed:[]};db[k].custom=db[k].custom||[];db[k].removed=db[k].removed||[];return db[k]}
+function ensureDay(i){let k=key(i),q=plans();if(!db[k]||typeof db[k]!=='object')db[k]={code:q[i][0],sets:{},notes:'',done:false,custom:[],removed:[]};let d=db[k];if(!q.some(x=>x[0]===d.code))d.code=q[i][0];d.sets=d.sets&&typeof d.sets==='object'?d.sets:{};d.notes=d.notes||'';d.custom=Array.isArray(d.custom)?d.custom:[];d.removed=Array.isArray(d.removed)?d.removed:[];return d}
 function get(i){return ensureDay(i)}
 function plan(c){return plans().find(x=>x[0]===c)}
-function persist(){localStorage.setItem(userStorageKey(),JSON.stringify(db));queueSync()}
+function persist(){localStorage.setItem('meuTreinoV4',JSON.stringify(db));queueSync()}
 function recurring(){db._recurring=db._recurring||{};db._recurring[profile]=db._recurring[profile]||{};return db._recurring[profile]}
 function hidden(){db._hiddenForever=db._hiddenForever||{};db._hiddenForever[profile]=db._hiddenForever[profile]||{};return db._hiddenForever[profile]}
 function exerciseListDate(date,code,weekday){
@@ -112,13 +112,86 @@ function exerciseList(i){
   let d=get(i);
   return exerciseListDate(key(i),d.code,i);
 }
-function choose(g){profile=g;localStorage.setItem('perfilTreino',g);if(currentUser)sb.from('profiles').update({sex:g==='homem'?'masculino':g==='mulher'?'feminino':g}).eq('id',currentUser.id).then(({error})=>{if(error)console.warn('Não foi possível salvar o perfil:',error)});start.classList.add('hidden');app.classList.remove('hidden');app.className='app '+(g==='mulher'?'female':'');subtitle.textContent=g==='mulher'?'Plano feminino':'Plano masculino';render();queueSync()}function changeProfile(){app.classList.add('hidden');start.classList.remove('hidden')}function tab(x){treino.classList.toggle('hidden',x!=='treino');historico.classList.toggle('hidden',x!=='historico');tt.classList.toggle('active',x==='treino');th.classList.toggle('active',x==='historico');if(x==='historico')historyRender()}
-function render(){let m=mon(),e=new Date(m);e.setDate(e.getDate()+4);week.textContent=m.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})+' — '+e.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});range.textContent=m.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'});let h='',done=0,sets=0;for(let i=0;i<5;i++){let d=get(i),q=plan(d.code);done+=d.done?1:0;sets+=Object.values(d.sets).filter(x=>x.ok).length;h+=`<button class="day ${i===sel?'active':''} ${d.done?'done':''}" onclick="selectDay(${i})"><i class="dot"></i><small>${['Seg','Ter','Qua','Qui','Sex'][i]} • ${dt(i).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}</small><strong>${q[1]}</strong></button>`}days.innerHTML=h;document.getElementById('done').textContent=done+'/5';document.getElementById('sets').textContent=sets;let c=weekCheck();weight.textContent=c?.weight?c.weight+' kg':'—';renderDay();renderMini()}
-function renderDay(){let d=get(sel),q=plan(d.code);day.textContent=['Segunda','Terça','Quarta','Quinta','Sexta'][sel]+' • '+dt(sel).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});name.textContent=q[1];focus.textContent=q[2];state.textContent=d.done?'Concluído':'Pendente';notes.value=d.notes||'';let h='';exerciseList(sel).forEach((x,i)=>{let n=parseInt(x.pres)||1,r='';for(let s=0;s<n;s++){let v=d.sets[x.id+'-'+s]||{};r+=`<div class="set"><span>${s+1}</span><input type="number" step="5" min="0" placeholder="kg" value="${v.kg??''}" onchange="setv('${x.id}',${s},'kg',this.value)"><input type="number" step="5" min="0" placeholder="reps" value="${v.reps??''}" onchange="setv('${x.id}',${s},'reps',this.value)"><input class="check" type="checkbox" ${v.ok?'checked':''} onchange="setv('${x.id}',${s},'ok',this.checked)"></div>`}h+=`<div class="exercise"><div class="exhead"><div><div class="ex">${x.name}</div><div class="meta">${x.pres}</div></div><button class="btn iconbtn danger" onclick="openDelete('${x.id}',${x.base?'true':'false'},${x.recurring?'true':'false'})">Excluir</button></div>${r}</div>`});list.innerHTML=h}
+function choose(g){profile=(g==='mulher'||g==='feminino')?'mulher':'homem';localStorage.setItem('perfilTreino',profile);if(currentUser){const sex=profile==='homem'?'masculino':'feminino';sb.from('profiles').update({sex}).eq('id',currentUser.id).then(({error})=>{if(error)console.warn('Não foi possível salvar o perfil:',error)});}start.classList.add('hidden');app.classList.remove('hidden');app.className='app '+(profile==='mulher'?'female':'');subtitle.textContent=profile==='mulher'?'Plano feminino':'Plano masculino';render();queueSync()}function changeProfile(){app.classList.add('hidden');start.classList.remove('hidden')}function tab(x){treino.classList.toggle('hidden',x!=='treino');historico.classList.toggle('hidden',x!=='historico');tt.classList.toggle('active',x==='treino');th.classList.toggle('active',x==='historico');if(x==='historico')historyRender()}
+function isTimeExercise(x){
+  const text=(x.name+' '+x.pres).toLowerCase();
+  return /min|seg|s\b|prancha|corrida|caminhada|bike|elíptico|eliptico|cardio|esteira/.test(text);
+}
+function exerciseSetCount(x){
+  const m=String(x.pres||'').match(/^(\d+)\s*x\s*/i);
+  return m?Number(m[1]):1;
+}
+function render(){
+  const weekEl=document.getElementById('week'),rangeEl=document.getElementById('range'),daysEl=document.getElementById('days');
+  const doneEl=document.getElementById('done'),setsEl=document.getElementById('sets'),weightEl=document.getElementById('weight');
+  let m=mon(),e=new Date(m);e.setDate(e.getDate()+4);
+  weekEl.textContent=m.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})+' — '+e.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+  rangeEl.textContent=m.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'});
+  let h='',done=0,sets=0;
+  for(let i=0;i<5;i++){
+    let d=get(i),q=plan(d.code)||plans()[i];
+    if(!q)continue;
+    if(!plan(d.code)){d.code=q[0];persist()}
+    done+=d.done?1:0;
+    sets+=Object.values(d.sets).filter(x=>x&&x.ok).length;
+    h+=`<button class="day ${i===sel?'active':''} ${d.done?'done':''}" onclick="selectDay(${i})"><i class="dot"></i><small>${['Seg','Ter','Qua','Qui','Sex'][i]} • ${dt(i).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}</small><strong>${q[1]}</strong></button>`;
+  }
+  daysEl.innerHTML=h;
+  doneEl.textContent=done+'/5';
+  setsEl.textContent=sets;
+  let c=weekCheck();weightEl.textContent=c?.weight?c.weight+' kg':'—';
+  renderDay();renderMini();
+}
+function renderDay(){
+  const dayEl=document.getElementById('day'),nameEl=document.getElementById('name'),focusEl=document.getElementById('focus'),stateEl=document.getElementById('state'),notesEl=document.getElementById('notes'),listEl=document.getElementById('list');
+  let d=get(sel),q=plan(d.code)||plans()[sel];
+  if(!q)return;
+  if(!plan(d.code)){d.code=q[0];persist()}
+  dayEl.textContent=['Segunda','Terça','Quarta','Quinta','Sexta'][sel]+' • '+dt(sel).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+  nameEl.textContent=q[1];
+  focusEl.textContent=q[2];
+  stateEl.textContent=d.done?'Concluído':'Pendente';
+  notesEl.value=d.notes||'';
+  let h='';
+  exerciseList(sel).forEach((x)=>{
+    const time=isTimeExercise(x),n=exerciseSetCount(x),unit=/min/i.test(x.pres)?'min':(/seg|\bs\b/i.test(x.pres)?'s':'');
+    let r='';
+    for(let s=0;s<n;s++){
+      let v=d.sets[x.id+'-'+s]||{};
+      if(time){
+        r+=`<div class="set"><span>${s+1}</span><input type="number" step="1" min="0" inputmode="numeric" placeholder="tempo" value="${v.time??''}" onchange="setv('${x.id}',${s},'time',this.value)"><span class="muted">${unit||'tempo'}</span><input class="check" type="checkbox" ${v.ok?'checked':''} onchange="setv('${x.id}',${s},'ok',this.checked)"></div>`;
+      }else{
+        r+=`<div class="set"><span>${s+1}</span><input type="number" step="5" min="0" placeholder="kg" value="${v.kg??''}" onchange="setv('${x.id}',${s},'kg',this.value)"><input type="number" step="1" min="0" placeholder="reps" value="${v.reps??''}" onchange="setv('${x.id}',${s},'reps',this.value)"><input class="check" type="checkbox" ${v.ok?'checked':''} onchange="setv('${x.id}',${s},'ok',this.checked)"></div>`;
+      }
+    }
+    h+=`<div class="exercise"><div class="exhead"><div><div class="ex">${x.name}</div><div class="meta">${x.pres}</div></div><button class="btn iconbtn danger" onclick="openDelete('${x.id}',${x.base?'true':'false'},${x.recurring?'true':'false'})">Excluir</button></div>${r}</div>`;
+  });
+  listEl.innerHTML=h;
+}
 function setv(id,s,f,v){let d=get(sel),k=id+'-'+s;d.sets[k]=d.sets[k]||{};d.sets[k][f]=f==='ok'?v:(v===''?'':Number(v));persist()}
 function closeModal(){document.getElementById('modal').classList.add('hidden')}
-function openAdd(){document.getElementById('modalTitle').textContent='Adicionar exercício';document.getElementById('modalBody').innerHTML=`<div class="muted">${['Segunda','Terça','Quarta','Quinta','Sexta'][sel]} • ${dt(sel).toLocaleDateString('pt-BR')}</div><div class="formgrid"><label>Nome do exercício<input id="newName" placeholder="Ex.: Cadeira flexora"></label><label>Quantidade de séries<input id="newSets" type="number" min="1" step="1" value="3"></label><label>Repetições por série<input id="newReps" type="number" min="1" step="5" value="10"></label><label>Aplicar<select id="newScope"><option value="once">Somente este dia</option><option value="future">A partir de agora, neste dia da semana</option></select></label></div><div class="modalactions"><button class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary" onclick="addExercise()">Adicionar</button></div>`;document.getElementById('modal').classList.remove('hidden')}
-function addExercise(){let n=document.getElementById('newName').value.trim(),s=Math.max(1,+document.getElementById('newSets').value||1),r=Math.max(1,+document.getElementById('newReps').value||10),scope=document.getElementById('newScope').value;if(!n){toast('Digite o nome do exercício');return}let id='custom-'+Date.now();let x={id,name:n,pres:s+' x '+r};if(scope==='once'){get(sel).custom.push(x)}else{let rr=recurring();rr[sel]=rr[sel]||[];rr[sel].push({...x,from:key(sel)})}persist();closeModal();render();toast('Exercício adicionado!')}
+function openAdd(){
+  document.getElementById('modalTitle').textContent='Adicionar exercício';
+  document.getElementById('modalBody').innerHTML=`<div class="muted">${['Segunda','Terça','Quarta','Quinta','Sexta'][sel]} • ${dt(sel).toLocaleDateString('pt-BR')}</div><div class="formgrid"><label>Nome do exercício<input id="newName" placeholder="Ex.: Cadeira flexora"></label><label>Tipo de registro<select id="newMetric" onchange="updateAddMetric()"><option value="reps">Peso + repetições</option><option value="time">Somente tempo</option></select></label><label>Quantidade de séries<input id="newSets" type="number" min="1" step="1" value="3"></label><label id="newValueLabel">Repetições por série<input id="newReps" type="number" min="1" step="1" value="10"></label><label>Aplicar<select id="newScope"><option value="once">Somente este dia</option><option value="future">A partir de agora, neste dia da semana</option></select></label></div><div class="modalactions"><button class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary" onclick="addExercise()">Adicionar</button></div>`;
+  document.getElementById('modal').classList.remove('hidden');
+}
+function updateAddMetric(){
+  const metric=document.getElementById('newMetric')?.value;
+  const label=document.getElementById('newValueLabel');
+  if(!label)return;
+  label.innerHTML=metric==='time'?'Tempo por série<input id="newReps" type="number" min="1" step="1" value="30">':'Repetições por série<input id="newReps" type="number" min="1" step="1" value="10">';
+}
+function addExercise(){
+  let n=document.getElementById('newName').value.trim(),s=Math.max(1,+document.getElementById('newSets').value||1),r=Math.max(1,+document.getElementById('newReps').value||10),metric=document.getElementById('newMetric').value,scope=document.getElementById('newScope').value;
+  if(!n){toast('Digite o nome do exercício');return}
+  const timeLike=/prancha|corrida|caminhada|bike|elíptico|eliptico|cardio|esteira/i.test(n);
+  if(timeLike)metric='time';
+  let id='custom-'+Date.now();
+  let x={id,name:n,pres:s+' x '+r+(metric==='time'?' s':'')};
+  if(metric==='time' && s===1)x.pres=r+' min';
+  if(scope==='once'){get(sel).custom.push(x)}else{let rr=recurring();rr[sel]=rr[sel]||[];rr[sel].push({...x,from:key(sel)})}
+  persist();closeModal();render();toast('Exercício adicionado!')
+}
 function openDelete(id,isBase,isRecurring){let text=isBase?'Excluir exercício do plano.':'Excluir exercício adicionado.';document.getElementById('modalTitle').textContent='Excluir exercício';document.getElementById('modalBody').innerHTML=`<div class="muted">${text}</div><div class="formgrid"><label class="choice"><input type="radio" name="delScope" value="once" checked> Somente este dia</label><label class="choice"><input type="radio" name="delScope" value="future"> A partir de agora, para este dia da semana</label></div><div class="modalactions"><button class="btn" onclick="closeModal()">Cancelar</button><button class="btn danger" onclick="deleteExercise('${id}',${isBase},${isRecurring})">Excluir</button></div>`;document.getElementById('modal').classList.remove('hidden')}
 function deleteExercise(id,isBase,isRecurring){let scope=document.querySelector('input[name="delScope"]:checked').value,d=get(sel),today=key(sel);
 if(scope==='once'){d.removed=d.removed||[];if(!d.removed.includes(id))d.removed.push(id)}
@@ -172,16 +245,8 @@ function fmtDate(x){return new Date(x+'T12:00:00').toLocaleDateString('pt-BR')}
 function lineSvg(arr,u){if(!arr.length)return '<div class="empty">Sem registros nesse período.</div>';let W=700,H=180,p=28,vals=arr.map(x=>x.v),min=Math.min(...vals),max=Math.max(...vals);if(min===max){min-=1;max+=1}let pts=arr.map((x,i)=>{let X=p+(arr.length===1?(W-2*p)/2:i*(W-2*p)/(arr.length-1));let Y=H-p-(x.v-min)/(max-min)*(H-2*p);return [X,Y,x]});let poly=pts.map(q=>q[0]+','+q[1]).join(' ');let circles=pts.map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="4"><title>${fmtDate(q[2].date)}: ${q[2].v} ${u}</title></circle>`).join('');return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><line x1="${p}" y1="${H-p}" x2="${W-p}" y2="${H-p}" stroke="currentColor" opacity=".2"/><polyline fill="none" stroke="currentColor" stroke-width="3" points="${poly}"/>${circles}</svg>`}
 function clearF(){setHistoryPeriod(30)}function toast(t){let x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1500)}
 
-function showRegister(){
-  document.getElementById('authForm').classList.add('hidden');
-  document.getElementById('registerBox').classList.remove('hidden');
-  setAuthMsg('');
-}
-function showLogin(){
-  document.getElementById('registerBox').classList.add('hidden');
-  document.getElementById('authForm').classList.remove('hidden');
-  setAuthMsg('');
-}
+function showRegister(){document.getElementById('loginBox').classList.add('hidden');document.getElementById('registerBox').classList.remove('hidden');setAuthMsg('')}
+function showLogin(){document.getElementById('registerBox').classList.add('hidden');document.getElementById('loginBox').classList.remove('hidden');setAuthMsg('')}
 async function registerUser(){
   setAuthMsg('');
   const name=document.getElementById('regName').value.trim();
@@ -194,17 +259,10 @@ async function registerUser(){
   try{
     const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name:name}}});
     if(error)throw error;
-    if(data?.session?.user){
-      setAuthMsg('Conta criada. Entrando...',true);
-      await startSession(data.session.user);
-    }else{
-      setAuthMsg('Conta criada. Confira seu e-mail para confirmar a conta e depois entre no aplicativo.',true);
-      document.getElementById('regPass').value='';
-      document.getElementById('regPass2').value='';
-    }
-  }catch(e){setAuthMsg(e.message||'Não foi possível criar a conta.')}
+    if(data?.session?.user){setAuthMsg('Conta criada. Entrando...');await startSession(data.session.user)}
+    else{setAuthMsg('Conta criada. Confira seu e-mail para confirmar a conta e depois entre.');document.getElementById('regPass').value='';document.getElementById('regPass2').value=''}
+  }catch(e){console.error(e);setAuthMsg(e.message||'Não foi possível criar a conta.')}
 }
-
 async function signIn(){
   const email=document.getElementById('authEmail').value.trim(),password=document.getElementById('authPassword').value;
   setAuthMsg(''); if(!email||!password){setAuthMsg('Digite e-mail e senha.');return}
@@ -235,16 +293,16 @@ async function loadCloud(){
   const {data:settings}=await sb.from('user_settings').select('data').eq('user_id',currentUser.id).maybeSingle();
   const {data:rows,error}=await sb.from('daily_records').select('record_date,data').eq('user_id',currentUser.id).order('record_date');
   if(error){setAuthMsg('Erro ao carregar seus dados.');return}
-  const localBefore=JSON.parse(localStorage.getItem('meuTreinoV4_'+currentUser.id)||'{}');
+  const localBefore=JSON.parse(localStorage.getItem('meuTreinoV4')||'{}');
   const cloud={};(rows||[]).forEach(r=>cloud[r.record_date]=r.data||{});
-  if(settings?.data?.profile) profile=settings.data.profile;
+  if(settings?.data?.profile) profile=(settings.data.profile==='feminino'||settings.data.profile==='mulher')?'mulher':'homem';
   if(settings?.data?.recurring) cloud._recurring=settings.data.recurring;
   if(settings?.data?.hidden) cloud._hiddenForever=settings.data.hidden;
   const cloudHas=Object.keys(cloud).some(k=>/^\d{4}-\d\d-\d\d$/.test(k));
   const localHas=Object.keys(localBefore).some(k=>/^\d{4}-\d\d-\d\d$/.test(k));
-  if(!cloudHas && localHas){db=localBefore;await syncNow();toast('Histórico local desta conta sincronizado.');}
-  else {db=cloud;localStorage.setItem(userStorageKey(),JSON.stringify(db));}
-  if(currentProfile?.sex) {profile=currentProfile.sex;localStorage.setItem('perfilTreino',profile)}
+  if(!cloudHas && localHas){db=localBefore;await syncNow();toast('Histórico local enviado para sua conta.');}
+  else {db=cloud;localStorage.setItem('meuTreinoV4',JSON.stringify(db));}
+  if(currentProfile?.sex) {profile=(currentProfile.sex==='feminino'||currentProfile.sex==='mulher')?'mulher':'homem';localStorage.setItem('perfilTreino',profile)}
 }
 function queueSync(){if(!currentUser)return;clearTimeout(syncTimer);syncTimer=setTimeout(syncNow,700)}
 async function syncNow(){
