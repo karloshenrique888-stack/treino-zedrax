@@ -100,7 +100,7 @@ function exerciseListDate(date,code,weekday){
   let d=db[date]||{sets:{},custom:[],removed:[]},q=plans().find(x=>x[0]===code),out=[];
   if(!q)return out;
   q[3].forEach((x,j)=>{
-    let id='base-'+j,h=hidden()[code]?.[j];
+    let id='base-'+profile+'-'+code+'-'+j,h=hidden()[code]?.[j];
     if(!d.removed?.includes(id)&&!(h&&date>=h))out.push({id,name:x[0],pres:x[1],base:true,index:j});
   });
   let rr=recurring()[weekday]||[];
@@ -115,7 +115,7 @@ function exerciseList(i){
 function choose(g){profile=(g==='mulher'||g==='feminino')?'mulher':'homem';localStorage.setItem('perfilTreino',profile);if(currentUser){const sex=profile==='homem'?'masculino':'feminino';sb.from('profiles').update({sex}).eq('id',currentUser.id).then(({error})=>{if(error)console.warn('Não foi possível salvar o perfil:',error)});}start.classList.add('hidden');app.classList.remove('hidden');app.className='app '+(profile==='mulher'?'female':'');subtitle.textContent=profile==='mulher'?'Plano feminino':'Plano masculino';render();queueSync()}function changeProfile(){app.classList.add('hidden');start.classList.remove('hidden')}function tab(x){treino.classList.toggle('hidden',x!=='treino');historico.classList.toggle('hidden',x!=='historico');tt.classList.toggle('active',x==='treino');th.classList.toggle('active',x==='historico');if(x==='historico')historyRender()}
 function isTimeExercise(x){
   const text=(x.name+' '+x.pres).toLowerCase();
-  return /min|seg|s\b|prancha|corrida|caminhada|bike|elíptico|eliptico|cardio|esteira/.test(text);
+  return /abdominal|prancha|bicicleta|bike|elíptico|eliptico|corrida|caminhada|esteira|cardio/.test(text);
 }
 function exerciseSetCount(x){
   const m=String(x.pres||'').match(/^(\d+)\s*x\s*/i);
@@ -154,7 +154,7 @@ function renderDay(){
   notesEl.value=d.notes||'';
   let h='';
   exerciseList(sel).forEach((x)=>{
-    const time=isTimeExercise(x),n=exerciseSetCount(x),unit=/min/i.test(x.pres)?'min':(/seg|\bs\b/i.test(x.pres)?'s':'');
+    const time=isTimeExercise(x),n=exerciseSetCount(x),unit=/min/i.test(x.pres)?'min':(/seg|\bs\b/i.test(x.pres)?'s':'tempo');
     let r='';
     for(let s=0;s<n;s++){
       let v=d.sets[x.id+'-'+s]||{};
@@ -164,7 +164,8 @@ function renderDay(){
         r+=`<div class="set"><span>${s+1}</span><input type="number" step="5" min="0" placeholder="kg" value="${v.kg??''}" onchange="setv('${x.id}',${s},'kg',this.value)"><input type="number" step="1" min="0" placeholder="reps" value="${v.reps??''}" onchange="setv('${x.id}',${s},'reps',this.value)"><input class="check" type="checkbox" ${v.ok?'checked':''} onchange="setv('${x.id}',${s},'ok',this.checked)"></div>`;
       }
     }
-    h+=`<div class="exercise"><div class="exhead"><div><div class="ex">${x.name}</div><div class="meta">${x.pres}</div></div><button class="btn iconbtn danger" onclick="openDelete('${x.id}',${x.base?'true':'false'},${x.recurring?'true':'false'})">Excluir</button></div>${r}</div>`;
+    const displayPres=time && /x/i.test(x.pres) && !/min|seg|\bs\b/i.test(x.pres)?String(x.pres).replace(/\d+\s*x\s*.*/i,n+' x tempo'):x.pres;
+    h+=`<div class="exercise"><div class="exhead"><div><div class="ex">${x.name}</div><div class="meta">${displayPres}</div></div><button class="btn iconbtn danger" onclick="openDelete('${x.id}',${x.base?'true':'false'},${x.recurring?'true':'false'})">Excluir</button></div>${r}</div>`;
   });
   listEl.innerHTML=h;
 }
@@ -184,18 +185,18 @@ function updateAddMetric(){
 function addExercise(){
   let n=document.getElementById('newName').value.trim(),s=Math.max(1,+document.getElementById('newSets').value||1),r=Math.max(1,+document.getElementById('newReps').value||10),metric=document.getElementById('newMetric').value,scope=document.getElementById('newScope').value;
   if(!n){toast('Digite o nome do exercício');return}
-  const timeLike=/prancha|corrida|caminhada|bike|elíptico|eliptico|cardio|esteira/i.test(n);
+  const timeLike=/abdominal|prancha|bicicleta|bike|elíptico|eliptico|corrida|caminhada|esteira|cardio/i.test(n);
   if(timeLike)metric='time';
   let id='custom-'+Date.now();
-  let x={id,name:n,pres:s+' x '+r+(metric==='time'?' s':'')};
-  if(metric==='time' && s===1)x.pres=r+' min';
+  let x={id,name:n,pres:metric==='time'?(s+' x tempo'):(s+' x '+r)};
+  if(metric==='time' && s===1)x.pres='tempo';
   if(scope==='once'){get(sel).custom.push(x)}else{let rr=recurring();rr[sel]=rr[sel]||[];rr[sel].push({...x,from:key(sel)})}
   persist();closeModal();render();toast('Exercício adicionado!')
 }
 function openDelete(id,isBase,isRecurring){let text=isBase?'Excluir exercício do plano.':'Excluir exercício adicionado.';document.getElementById('modalTitle').textContent='Excluir exercício';document.getElementById('modalBody').innerHTML=`<div class="muted">${text}</div><div class="formgrid"><label class="choice"><input type="radio" name="delScope" value="once" checked> Somente este dia</label><label class="choice"><input type="radio" name="delScope" value="future"> A partir de agora, para este dia da semana</label></div><div class="modalactions"><button class="btn" onclick="closeModal()">Cancelar</button><button class="btn danger" onclick="deleteExercise('${id}',${isBase},${isRecurring})">Excluir</button></div>`;document.getElementById('modal').classList.remove('hidden')}
 function deleteExercise(id,isBase,isRecurring){let scope=document.querySelector('input[name="delScope"]:checked').value,d=get(sel),today=key(sel);
 if(scope==='once'){d.removed=d.removed||[];if(!d.removed.includes(id))d.removed.push(id)}
-else if(isBase){let q=plan(d.code),idx=q[3].findIndex((x,j)=>'base-'+j===id);hidden()[d.code]=hidden()[d.code]||{};hidden()[d.code][idx]=today}
+else if(isBase){let q=plan(d.code),idx=q[3].findIndex((x,j)=>'base-'+profile+'-'+d.code+'-'+j===id);hidden()[d.code]=hidden()[d.code]||{};hidden()[d.code][idx]=today}
 else if(isRecurring){let rr=recurring();let arr=rr[sel]||[];arr.forEach(x=>{if(x.id===id&&!x.until)x.until=today});rr[sel]=arr}
 else{d.custom=d.custom||[];d.custom=d.custom.filter(x=>x.id!==id);d.removed=d.removed||[];if(!d.removed.includes(id))d.removed.push(id)}
 persist();closeModal();render();toast(scope==='once'?'Excluído só deste dia':'Excluído a partir deste dia')}
