@@ -19,6 +19,7 @@
 <div id="auth" class="authscreen">
 <div class="authbox">
 <div class="logo" style="margin:0 auto 12px">T</div>
+<div id="loginBox">
 <h1>Entrar no TREINO ZEDRAX</h1>
 <p class="muted">Use seu e-mail e senha para sincronizar seus treinos em celular e computador.</p>
 <div class="authform">
@@ -28,7 +29,25 @@
 </div>
 <div class="authswitch">
 <button class="btn" onclick="forgot()">Esqueci a senha</button>
+<button class="btn" onclick="showRegister()">Criar conta</button>
 </div>
+</div>
+
+<div id="registerBox" class="hidden">
+<h1>Criar conta</h1>
+<p class="muted">Crie sua conta diretamente pelo TREINO ZEDRAX. O acesso de administrador é reservado.</p>
+<div class="authform">
+<label>Nome<input id="regName" type="text" autocomplete="name" placeholder="Seu nome"></label>
+<label>E-mail<input id="regEmail" type="email" autocomplete="email" placeholder="seu@email.com"></label>
+<label>Senha<input id="regPass" type="password" autocomplete="new-password" placeholder="Mínimo recomendado: 6 caracteres"></label>
+<label>Confirmar senha<input id="regPass2" type="password" autocomplete="new-password" placeholder="Repita sua senha"></label>
+<button class="btn primary" onclick="registerUser()">Criar conta</button>
+</div>
+<div class="authswitch">
+<button class="btn" onclick="showLogin()">Já tenho uma conta</button>
+</div>
+</div>
+
 <div id="authMsg" class="authmsg"></div>
 </div></div>
 
@@ -76,6 +95,48 @@ function setAuthMsg(msg=''){authMsg.textContent=msg}
 function getSB(){if(!sb)sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);return sb}
 function localKeyForUser(){return currentUser?'meuTreinoV4:'+currentUser.id:'meuTreinoV4'}
 function readLocalData(key){try{return JSON.parse(localStorage.getItem(key)||'{}')}catch(e){console.warn('Dados locais inválidos:',e);return {}}}
+
+function showRegister(){
+  $('loginBox').classList.add('hidden');
+  $('registerBox').classList.remove('hidden');
+  setAuthMsg('');
+}
+
+function showLogin(){
+  $('registerBox').classList.add('hidden');
+  $('loginBox').classList.remove('hidden');
+  setAuthMsg('');
+}
+
+async function registerUser(){
+  setAuthMsg('');
+  const name=$('regName').value.trim();
+  const email=$('regEmail').value.trim().toLowerCase();
+  const password=$('regPass').value;
+  const password2=$('regPass2').value;
+  if(!name||!email||!password||!password2){setAuthMsg('Preencha todos os campos.');return}
+  if(password.length<6){setAuthMsg('A senha precisa ter pelo menos 6 caracteres.');return}
+  if(password!==password2){setAuthMsg('As senhas não são iguais.');return}
+  try{
+    const {data,error}=await getSB().auth.signUp({
+      email,
+      password,
+      options:{data:{full_name:name}}
+    });
+    if(error)throw error;
+    if(data?.session?.user){
+      setAuthMsg('Conta criada. Entrando...');
+      await startSession(data.session.user);
+    }else{
+      setAuthMsg('Conta criada. Confira seu e-mail para confirmar a conta e depois entre no aplicativo.');
+      $('regPass').value='';
+      $('regPass2').value='';
+    }
+  }catch(e){
+    console.error(e);
+    setAuthMsg(e.message||'Não foi possível criar a conta.');
+  }
+}
 
 async function login(){
   setAuthMsg('');
@@ -165,6 +226,7 @@ async function logout(){
   start.classList.add('hidden');
   adminBtn.classList.add('hidden');
   auth.classList.remove('hidden');
+  showLogin();
   setAuthMsg('');
 }
 
