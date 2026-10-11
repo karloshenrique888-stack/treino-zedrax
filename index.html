@@ -176,7 +176,7 @@ async function logout(){await sb.auth.signOut();location.reload()}
 async function startSession(user){
   currentUser=user;
   const {data:prof,error}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
-  if(error||!prof){setAuthMsg('Seu perfil ainda não está configurado.');await sb.auth.signOut();return}
+  if(error||!prof){setAuthMsg('Erro ao carregar perfil: '+(error?.message||'nenhum perfil encontrado'));await sb.auth.signOut();return}
   if(prof.status!=='active'){setAuthMsg('Esta conta está bloqueada.');await sb.auth.signOut();return}
   currentProfile=prof;
   await loadCloud();
