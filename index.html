@@ -2,7 +2,7 @@
 <style>
 :root{--bg:#080b10;--card:#11161e;--card2:#0c1117;--line:#26313e;--txt:#f5f7fa;--muted:#95a0ad;--a:#8cff2f}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:15px system-ui,sans-serif}.app{max-width:940px;margin:auto;padding:12px}.hidden{display:none!important}button,input,textarea,select{font:inherit}.btn{border:1px solid var(--line);background:var(--card);color:var(--txt);border-radius:10px;padding:9px 12px;cursor:pointer}.primary{background:var(--a);border-color:var(--a);color:#071006;font-weight:850}.start{min-height:95vh;display:grid;place-items:center;text-align:center}.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}.gender{background:var(--card);color:var(--txt);border:1px solid var(--line);border-radius:20px;padding:28px 18px;cursor:pointer}.gender:hover{border-color:var(--a)}.gender i{font-size:45px;font-style:normal}.gender b{display:block;font-size:20px}.gender span{color:var(--muted);font-size:12px}.female{--a:#ff72b5}.female .logo,.female .primary,.female .tab.active{background:var(--a);border-color:var(--a)}header,.weektop,.title{display:flex;justify-content:space-between;gap:10px;align-items:center}.brand{display:flex;gap:10px;align-items:center}.logo{width:42px;height:42px;border-radius:13px;background:var(--a);color:#071006;display:grid;place-items:center;font-weight:950}.brand h1{margin:0;font-size:21px}.brand small,.muted{color:var(--muted)}header{margin-bottom:12px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}.tab{border:1px solid var(--line);background:var(--card);color:var(--muted);padding:10px;border-radius:10px;font-weight:800}.tab.active{background:var(--a);color:#071006}.week,.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px}.week{margin-bottom:11px;background:linear-gradient(135deg,#11171f,#11190f)}.week h2{margin:4px 0;font-size:25px}.nav{display:flex;gap:6px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:13px}.stat{background:var(--card2);border:1px solid var(--line);border-radius:11px;padding:9px}.stat small{color:var(--muted)}.stat b{display:block;font-size:19px}.days{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:11px}.day{position:relative;text-align:left;min-height:70px;background:var(--card);color:var(--txt);border:1px solid var(--line);border-radius:12px;padding:9px;cursor:pointer}.day small{color:var(--muted);font-size:10px}.day strong{display:block;margin-top:4px;font-size:12px}.day.active{border-color:var(--a);background:#101a10}.dot{position:absolute;right:8px;top:9px;width:7px;height:7px;border-radius:50%;background:#46515d}.done .dot{background:var(--a)}.badge{border:1px solid var(--line);border-radius:999px;padding:4px 8px;color:var(--muted);font-size:10px;font-weight:850}.title h3{margin:4px 0;font-size:20px}.exercise{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:11px;margin:8px 0}.ex{font-weight:850}.meta{font-size:11px;color:var(--muted)}.set{display:grid;grid-template-columns:25px 1fr 1fr 28px;gap:6px;align-items:center;margin-top:7px}.set span{font-size:11px;color:var(--muted);text-align:center}.set input:not(.check){width:100%;background:#080c11;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px}.check{width:20px;height:20px;accent-color:var(--a)}.notes{margin-top:12px}.notes textarea{width:100%;min-height:75px;background:#080c11;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:9px;resize:vertical}.finish{margin-top:10px}.finish button{width:100%;padding:12px}.checkin{margin-top:11px}.checkgrid{display:grid;grid-template-columns:1fr 1fr auto;gap:7px}.checkgrid input,.filters select,.filters input{width:100%;background:#080c11;color:var(--txt);border:1px solid var(--line);border-radius:9px;padding:9px}.mini{margin-top:9px;color:var(--muted);font-size:12px}.filters{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:7px;margin:10px 0}.row{background:var(--card2);border:1px solid var(--line);border-radius:11px;padding:10px;margin:7px 0}.rowtop{display:flex;justify-content:space-between}.row small{color:var(--muted)}.empty{text-align:center;color:var(--muted);padding:25px}.hint{color:var(--muted);font-size:13px;line-height:1.5}.historysummary{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0}.historysummary div{background:var(--card2);border:1px solid var(--line);border-radius:11px;padding:10px}.historysummary b{display:block;font-size:18px}.historysummary small{color:var(--muted)}.historyitem{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0}.historydate{display:flex;justify-content:space-between;text-transform:capitalize;color:var(--muted);font-size:13px;margin-bottom:5px}.historydate span{color:var(--a);font-weight:900}.historymeta{color:var(--muted);font-size:12px;margin-top:4px}.evoBig{font-size:30px;font-weight:900;margin:5px 0}.chartbox{min-height:190px;overflow:hidden}.chartbox svg{width:100%;height:190px}.statslist{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.statslist div{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px}.statslist b{display:block;font-size:22px}@media(max-width:600px){.historysummary{grid-template-columns:1fr 1fr}.historysummary div:last-child{grid-column:1/-1}}.datefilter{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}.datefilter label{font-weight:800;font-size:13px}.datefilter input{display:block;width:100%;margin-top:5px}.evoNumbers{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.evoNumbers div{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;min-width:110px}.evoNumbers b{display:block;font-size:20px}.chartbox{min-height:190px;overflow:hidden}.chartbox svg{width:100%;height:190px}.statslist{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.statslist div{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px}.statslist b{display:block;font-size:22px}@media(max-width:600px){.datefilter{grid-template-columns:1fr}.statslist{grid-template-columns:1fr 1fr}.statslist div:last-child{grid-column:1/-1}}.toast{position:fixed;bottom:15px;left:50%;transform:translate(-50%,20px);opacity:0;background:#efffe6;color:#102009;padding:9px 14px;border-radius:99px;font-weight:800;transition:.2s}.show{opacity:1;transform:translate(-50%,0)}@media(max-width:600px){.app{padding:9px}.choices{gap:8px}.gender{padding:22px 8px}.weektop{align-items:flex-start}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:1/-1}.days{grid-template-columns:repeat(2,1fr)}.days .day:last-child{grid-column:1/-1}.checkgrid,.filters{grid-template-columns:1fr 1fr}.checkgrid button,.filters button{grid-column:1/-1}}
 
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:grid;place-items:center;padding:16px;z-index:20}.modalbox{width:min(520px,100%);background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 20px 60px #0008}.modalbox h3{margin:0 0 6px}.formgrid{display:grid;gap:10px;margin-top:14px}.formgrid label{display:grid;gap:5px;font-size:13px;color:var(--muted)}.formgrid input,.formgrid select{background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:11px}.modalactions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}.manage{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:14px 0 2px}.manage .btn{font-size:13px}.exhead{display:flex;align-items:center;justify-content:space-between;gap:8px}.iconbtn{padding:5px 8px;font-size:12px}.danger{border-color:#6b3030;color:#ff9b9b}.choice{display:flex!important;gap:8px!important;align-items:center}.choice input{width:auto}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:grid;place-items:center;padding:16px;z-index:20}.modalbox{width:min(520px,100%);background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 20px 60px #0008}.modalbox h3{margin:0 0 6px}.formgrid{display:grid;gap:10px;margin-top:14px}.formgrid label{display:grid;gap:5px;font-size:13px;color:var(--muted)}.formgrid input,.formgrid select{background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:11px}.modalactions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}.manage{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:14px 0 2px}.manage .btn{font-size:13px}.exhead{display:flex;align-items:center;justify-content:space-between;gap:8px}.iconbtn{padding:5px 8px;font-size:12px}.danger{border-color:#6b3030;color:#ff9b9b}.choice{display:flex!important;gap:8px!important;align-items:center}.choice input{width:auto}.exercise-tools{display:flex;justify-content:flex-end;margin:10px 0}.exercise-tools button{width:auto}.exercise .exhead .danger{white-space:nowrap}
 
 .authscreen{min-height:100vh;display:grid;place-items:center;padding:18px;background:var(--bg)}
 .authbox{width:min(430px,100%);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 20px 60px #0008}
@@ -71,6 +71,14 @@
 </section>
 </div>
 
+<div id="exerciseModal" class="modal hidden"><div class="modalbox">
+<h3 id="exerciseModalTitle">Adicionar exercício</h3>
+<p class="muted">Escolha se a mudança vale só para a data selecionada ou para as próximas ocorrências deste dia da semana.</p>
+<div class="formgrid"><label>Nome do exercício<input id="exerciseName" type="text" maxlength="80" placeholder="Ex.: Cadeira flexora"></label><label>Séries<input id="exerciseSets" type="number" min="1" max="20" value="3"></label><label>Repetições<input id="exerciseReps" type="text" maxlength="20" value="10–12" placeholder="Ex.: 10–12"></label><label>Aplicar<select id="exerciseScope"><option value="once">Somente este dia</option><option value="future">Neste dia da semana, a partir desta data</option></select></label></div>
+<div class="modalactions"><button class="btn" onclick="closeExerciseModal()">Cancelar</button><button class="btn primary" onclick="addExercise()">Adicionar exercício</button></div>
+<div id="exerciseMsg" class="authmsg"></div>
+</div></div>
+
 <div id="adminModal" class="modal hidden"><div class="modalbox">
 <h3>Administração</h3><div class="muted">Gerencie os usuários cadastrados.</div>
 <div class="formgrid"><label>E-mail do novo usuário<input id="newEmail" type="email" placeholder="usuario@email.com"></label><label>Senha inicial<input id="newPass" type="password" placeholder="Senha"></label><label>Perfil<select id="newSex"><option value="masculino">Masculino</option><option value="feminino">Feminino</option></select></label></div>
@@ -87,7 +95,6 @@ const SUPABASE_URL='https://iiooyswatrojedzaymfk.supabase.co';
 const SUPABASE_KEY='sb_publishable_n-EbDTSmxM5RfzEVSz9HOA_MkYvY7cS';
 let sb=null,currentUser=null,currentProfile=null,profile=localStorage.getItem('perfilTreino')||'',db={},week=0,selectedDate='',syncTimer=null;
 
-const ADMIN_EMAIL='karloshenrique888@gmail.com';
 const $=id=>document.getElementById(id);
 const auth=$('auth'),authMsg=$('authMsg'),start=$('start'),app=$('app'),subtitle=$('subtitle'),days=$('days'),daycard=$('daycard'),toastEl=$('toast'),adminBtn=$('adminBtn'),adminModal=$('adminModal');
 
@@ -129,7 +136,7 @@ async function registerUser(){
       setAuthMsg('Conta criada. Entrando...');
       await startSession(data.session.user);
     }else{
-      setAuthMsg('Conta criada. Se a confirmação por e-mail estiver ativada, confira seu e-mail. Depois, entre no aplicativo.');
+      setAuthMsg('Conta criada. Confira seu e-mail para confirmar a conta e depois entre no aplicativo.');
       $('regPass').value='';
       $('regPass2').value='';
     }
@@ -167,9 +174,6 @@ async function startSession(user){
   const {data:prof,error}=await getSB().from('profiles').select('*').eq('id',user.id).maybeSingle();
   if(error)throw new Error('Erro ao carregar perfil: '+error.message);
   if(!prof)throw new Error('Seu perfil não está configurado no Supabase.');
-  if(prof.role==='admin' && (user.email||'').toLowerCase()!==ADMIN_EMAIL){
-    console.warn('Perfil admin fora da conta administrativa.');
-  }
   if(prof.status!=='active'){await getSB().auth.signOut();setAuthMsg('Esta conta está bloqueada.');return}
   currentProfile=prof;
   await loadCloud();
@@ -249,6 +253,9 @@ async function loadCloud(){
   (rows||[]).forEach(r=>{cloud[r.record_date]=r.data||{}});
   if(settings?.data?.recurring)cloud._recurring=settings.data.recurring;
   if(settings?.data?.hidden)cloud._hiddenForever=settings.data.hidden;
+  if(settings?.data?.customExercises)cloud._customExercises=settings.data.customExercises;
+  if(settings?.data?.hiddenExercises)cloud._hiddenExercises=settings.data.hiddenExercises;
+  if(settings?.data?.hiddenCustomExercises)cloud._hiddenCustomExercises=settings.data.hiddenCustomExercises;
   const hasDates=obj=>Object.keys(obj||{}).some(k=>/^\d{4}-\d\d-\d\d$/.test(k));
   const cloudHas=hasDates(cloud),accountHas=hasDates(accountLocal),legacyHas=hasDates(legacyLocal);
   if(!cloudHas&&!accountHas&&legacyHas&&!localStorage.getItem('meuTreinoV4_migration_target')){
@@ -278,7 +285,7 @@ async function syncNow(){
 
   try{
     const rows=Object.keys(db)
-      .filter(k=>/^\d{4}-\d\d-\d\d$/.test(k) && recordHasData(db[k]))
+      .filter(k=>/^\d{4}-\d\d-\d\d$/.test(k))
       .map(k=>({
         user_id:currentUser.id,
         record_date:k,
@@ -299,7 +306,10 @@ async function syncNow(){
     const settings={
       profile,
       recurring:db._recurring?.[profile]||{},
-      hidden:db._hiddenForever?.[profile]||{}
+      hidden:db._hiddenForever?.[profile]||{},
+      customExercises:db._customExercises||{},
+      hiddenExercises:db._hiddenExercises||{},
+      hiddenCustomExercises:db._hiddenCustomExercises||{}
     };
 
     const {error}=await getSB()
@@ -450,24 +460,14 @@ function getWeekDays(){
   });
 }
 
-function emptyRecord(){
-  return {done:false,exercises:{},notes:'',checkin:{}};
-}
-
-function getRecord(k,create=true){
-  if(!db[k]&&create)db[k]=emptyRecord();
-  return db[k]||emptyRecord();
-}
-
-function recordHasData(r){
-  if(!r)return false;
-  if(r.done)return true;
-  if(String(r.notes||'').trim())return true;
-  if(r.checkin && (r.checkin.weight!==''&&r.checkin.weight!=null || r.checkin.energy!==''&&r.checkin.energy!=null))return true;
-  const exercises=r.exercises||{};
-  return Object.values(exercises).some(sets=>Array.isArray(sets)&&sets.some(s=>
-    s && (s.done===true || s.weight!==''&&s.weight!=null || s.reps!==''&&s.reps!=null)
-  ));
+function getRecord(k){
+  if(!db[k])db[k]={
+    done:false,
+    exercises:{},
+    notes:'',
+    checkin:{}
+  };
+  return db[k];
 }
 
 function render(){
@@ -529,11 +529,70 @@ function renderStats(){
   $('sRate').textContent=Math.round(done/ds.length*100)+'%';
 }
 
+function selectedDayIndex(){
+  const i=getWeekDays().findIndex(d=>dateKey(d)===selectedDate);
+  return i<0?0:i;
+}
+function visibleExercisesForDate(r){
+  const idx=selectedDayIndex();
+  const base=(getExercises()[idx]||[]).map((x,i)=>({name:x[0],sets:Number(x[1]),reps:x[2],kind:'base',baseIndex:i}));
+  const removedOnce=Array.isArray(r.removedExercises)?r.removedExercises:[];
+  const hidden=(db._hiddenExercises?.[profile]?.[idx]||[]);
+  const visibleBase=base.filter(x=>!removedOnce.includes(x.name)&&!hidden.some(h=>h.name===x.name&&selectedDate>=h.from));
+  const recurring=(db._customExercises?.[profile]?.[idx]||[])
+    .filter(x=>selectedDate>=x.from&&!(r.removedRecurringExercises||[]).includes(x.id)&&!(db._hiddenCustomExercises?.[profile]?.[idx]||[]).some(h=>h.id===x.id&&selectedDate>=h.from))
+    .map(x=>({...x,kind:'recurring'}));
+  const once=(r.customExercises||[]).map(x=>({...x,kind:'once'}));
+  return [...visibleBase,...recurring,...once];
+}
+function openExerciseModal(){
+  $('exerciseName').value='';$('exerciseSets').value='3';$('exerciseReps').value='10–12';$('exerciseScope').value='once';$('exerciseMsg').textContent='';
+  $('exerciseModalTitle').textContent='Adicionar exercício';
+  $('exerciseModal').classList.remove('hidden');
+}
+function closeExerciseModal(){$('exerciseModal').classList.add('hidden')}
+function addExercise(){
+  const name=$('exerciseName').value.trim();
+  const sets=Number($('exerciseSets').value);
+  const reps=$('exerciseReps').value.trim()||'10–12';
+  const scope=$('exerciseScope').value;
+  if(!name){$('exerciseMsg').textContent='Digite o nome do exercício.';return}
+  if(!Number.isInteger(sets)||sets<1||sets>20){$('exerciseMsg').textContent='Informe de 1 a 20 séries.';return}
+  const idx=selectedDayIndex(),r=getRecord(selectedDate);
+  const exists=visibleExercisesForDate(r).some(x=>x.name.toLocaleLowerCase()===name.toLocaleLowerCase());
+  if(exists){$('exerciseMsg').textContent='Esse exercício já está neste treino.';return}
+  const item={id:'custom-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),name,sets,reps,from:selectedDate};
+  if(scope==='future'){
+    db._customExercises=db._customExercises||{};db._customExercises[profile]=db._customExercises[profile]||{};db._customExercises[profile][idx]=db._customExercises[profile][idx]||[];db._customExercises[profile][idx].push(item);
+  }else{
+    r.customExercises=r.customExercises||[];r.customExercises.push(item);
+  }
+  save();closeExerciseModal();renderDay();toast(scope==='future'?'Exercício adicionado às próximas ocorrências deste dia.':'Exercício adicionado somente a esta data.');
+}
+function removeExercise(index){
+  const r=getRecord(selectedDate),list=visibleExercisesForDate(r),item=list[index];
+  if(!item)return;
+  const future=confirm(`Excluir “${item.name}”.\n\nOK = excluir desta data e das próximas ocorrências deste dia da semana.\nCancelar = escolher exclusão somente desta data.`);
+  const onceOnly=future?false:confirm('Confirma excluir “'+item.name+'” somente desta data?');
+  if(!future&&!onceOnly)return;
+  const idx=selectedDayIndex();
+  if(item.kind==='base'){
+    if(future){db._hiddenExercises=db._hiddenExercises||{};db._hiddenExercises[profile]=db._hiddenExercises[profile]||{};db._hiddenExercises[profile][idx]=db._hiddenExercises[profile][idx]||[];db._hiddenExercises[profile][idx].push({name:item.name,from:selectedDate});}
+    else{r.removedExercises=r.removedExercises||[];if(!r.removedExercises.includes(item.name))r.removedExercises.push(item.name);}
+  }else if(item.kind==='recurring'){
+    if(future){db._hiddenCustomExercises=db._hiddenCustomExercises||{};db._hiddenCustomExercises[profile]=db._hiddenCustomExercises[profile]||{};db._hiddenCustomExercises[profile][idx]=db._hiddenCustomExercises[profile][idx]||[];db._hiddenCustomExercises[profile][idx].push({id:item.id,from:selectedDate});}
+    else{r.removedRecurringExercises=r.removedRecurringExercises||[];r.removedRecurringExercises.push(item.id);}
+  }else{
+    r.customExercises=(r.customExercises||[]).filter(x=>x.id!==item.id);
+  }
+  save();renderDay();toast('Exercício excluído.');
+}
+
 function renderDay(){
   const d=parseKey(selectedDate);
   const dayIndex=getWeekDays().findIndex(x=>dateKey(x)===selectedDate);
-  const exs=getExercises()[dayIndex<0?0:dayIndex];
   const r=getRecord(selectedDate);
+  const exs=visibleExercisesForDate(r);
 
   daycard.innerHTML=`
     <div class="card">
@@ -550,6 +609,7 @@ function renderDay(){
       </div>
 
       ${exs.map((ex,ei)=>renderExercise(ex,ei,r)).join('')}
+      <div class="exercise-tools"><button class="btn" onclick="openExerciseModal()">＋ Adicionar exercício</button></div>
 
       <div class="notes">
         <label class="muted">Observações</label>
@@ -589,50 +649,22 @@ function renderDay(){
 }
 
 function renderExercise(ex,ei,r){
-  const name=ex[0];
-  const sets=Number(ex[1]);
-  const reps=ex[2];
+  const name=ex.name;
+  const sets=Number(ex.sets);
+  const reps=ex.reps;
   const saved=r.exercises?.[name]||[];
-
+  const safeName=String(name).replaceAll('\\','\\\\').replaceAll("'","\\'");
   return `
     <div class="exercise">
       <div class="exhead">
-        <div>
-          <div class="ex">${name}</div>
-          <div class="meta">${sets} séries · ${reps} repetições</div>
-        </div>
+        <div><div class="ex">${escapeHtml(name)}</div><div class="meta">${sets} séries · ${escapeHtml(reps)} repetições</div></div>
+        <button class="btn iconbtn danger" onclick="removeExercise(${ei})" aria-label="Excluir ${escapeHtml(name)}">Excluir</button>
       </div>
-
       ${Array.from({length:sets},(_,si)=>{
-        const s=saved[si]||{};
-        return `
-          <div class="set">
-            <span>${si+1}</span>
-            <input
-              type="number"
-              step="0.5"
-              placeholder="kg"
-              value="${s.weight??''}"
-              onchange="setExerciseValue('${name}',${si},'weight',this.value)"
-            >
-            <input
-              type="number"
-              step="1"
-              placeholder="reps"
-              value="${s.reps??''}"
-              onchange="setExerciseValue('${name}',${si},'reps',this.value)"
-            >
-            <input
-              class="check"
-              type="checkbox"
-              ${s.done?'checked':''}
-              onchange="setExerciseValue('${name}',${si},'done',this.checked)"
-            >
-          </div>
-        `;
+        const v=saved[si]||{};
+        return `<div class="set"><span>${si+1}</span><input type="number" step="0.5" placeholder="kg" value="${v.weight??''}" onchange="setExerciseValue('${safeName}',${si},'weight',this.value)"><input type="number" step="1" placeholder="reps" value="${v.reps??''}" onchange="setExerciseValue('${safeName}',${si},'reps',this.value)"><input class="check" type="checkbox" ${v.done?'checked':''} onchange="setExerciseValue('${safeName}',${si},'done',this.checked)"></div>`;
       }).join('')}
-    </div>
-  `;
+    </div>`;
 }
 
 function setExerciseValue(name,si,key,value){
@@ -721,7 +753,7 @@ function clearHistoryFilter(){
 
 function getHistoryRows(){
   return Object.keys(db)
-    .filter(k=>/^\d{4}-\d\d-\d\d$/.test(k) && recordHasData(db[k]))
+    .filter(k=>/^\d{4}-\d\d-\d\d$/.test(k))
     .sort((a,b)=>b.localeCompare(a))
     .map(k=>({date:k,data:db[k]}));
 }
@@ -776,7 +808,7 @@ function historyRender(){
 
   if(!rows.length){
     $('historyList').innerHTML=
-      '<div class="empty">Nenhum treino registrado ainda.</div>';
+      '<div class="empty">Nenhum treino encontrado.</div>';
     return;
   }
 
@@ -874,16 +906,17 @@ async function adminLoadUsers(){
           <small>${u.role==='admin'?'Administrador':'Usuário'}</small>
         </div>
 
-        <div>
-          <span class="badge">${u.role==='admin'?'Administrador':'Usuário'}</span>
-        </div>
+        <select onchange="adminUpdateUser('${u.id}','role',this.value)">
+          <option value="user" ${u.role==='user'?'selected':''}>Usuário</option>
+          <option value="admin" ${u.role==='admin'?'selected':''}>Admin</option>
+        </select>
 
-        <select ${u.id===currentUser.id?'disabled':''} onchange="adminUpdateUser('${u.id}','status',this.value)">
+        <select onchange="adminUpdateUser('${u.id}','status',this.value)">
           <option value="active" ${u.status==='active'?'selected':''}>Ativo</option>
           <option value="blocked" ${u.status==='blocked'?'selected':''}>Bloqueado</option>
         </select>
 
-        <button class="btn danger" ${u.id===currentUser.id?'disabled':''} onclick="adminDeleteUser('${u.id}')">
+        <button class="btn danger" onclick="adminDeleteUser('${u.id}')">
           Excluir
         </button>
       </div>
@@ -895,15 +928,6 @@ async function adminLoadUsers(){
 }
   async function adminUpdateUser(id,field,value){
   if(currentProfile?.role!=='admin')return;
-  if(field==='role'){
-    $('adminMsg').textContent='O único administrador é a conta principal.';
-    return;
-  }
-  if(id===currentUser.id){
-    $('adminMsg').textContent='Você não pode bloquear a própria conta.';
-    adminLoadUsers();
-    return;
-  }
 
   try{
     const update={};
@@ -1022,10 +1046,11 @@ function init(){
   });
 }
 
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(e=>console.warn('Service worker:',e)));}
+
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'&&!adminModal.classList.contains('hidden')){
-    closeAdmin();
-  }
+  if(e.key==='Escape'&&!adminModal.classList.contains('hidden'))closeAdmin();
+  if(e.key==='Escape'&&!$('exerciseModal').classList.contains('hidden'))closeExerciseModal();
 });
 
 </script>
