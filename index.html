@@ -87,6 +87,7 @@ const SUPABASE_URL='https://iiooyswatrojedzaymfk.supabase.co';
 const SUPABASE_KEY='sb_publishable_n-EbDTSmxM5RfzEVSz9HOA_MkYvY7cS';
 let sb=null,currentUser=null,currentProfile=null,profile=localStorage.getItem('perfilTreino')||'',db={},week=0,selectedDate='',syncTimer=null;
 
+const ADMIN_EMAIL='karloshenrique888@gmail.com';
 const $=id=>document.getElementById(id);
 const auth=$('auth'),authMsg=$('authMsg'),start=$('start'),app=$('app'),subtitle=$('subtitle'),days=$('days'),daycard=$('daycard'),toastEl=$('toast'),adminBtn=$('adminBtn'),adminModal=$('adminModal');
 
@@ -128,7 +129,7 @@ async function registerUser(){
       setAuthMsg('Conta criada. Entrando...');
       await startSession(data.session.user);
     }else{
-      setAuthMsg('Conta criada. Confira seu e-mail para confirmar a conta e depois entre no aplicativo.');
+      setAuthMsg('Conta criada. Se a confirmação por e-mail estiver ativada, confira seu e-mail. Depois, entre no aplicativo.');
       $('regPass').value='';
       $('regPass2').value='';
     }
@@ -166,6 +167,9 @@ async function startSession(user){
   const {data:prof,error}=await getSB().from('profiles').select('*').eq('id',user.id).maybeSingle();
   if(error)throw new Error('Erro ao carregar perfil: '+error.message);
   if(!prof)throw new Error('Seu perfil não está configurado no Supabase.');
+  if(prof.role==='admin' && (user.email||'').toLowerCase()!==ADMIN_EMAIL){
+    console.warn('Perfil admin fora da conta administrativa.');
+  }
   if(prof.status!=='active'){await getSB().auth.signOut();setAuthMsg('Esta conta está bloqueada.');return}
   currentProfile=prof;
   await loadCloud();
@@ -274,7 +278,7 @@ async function syncNow(){
 
   try{
     const rows=Object.keys(db)
-      .filter(k=>/^\d{4}-\d\d-\d\d$/.test(k))
+      .filter(k=>/^\d{4}-\d\d-\d\d$/.test(k) && recordHasData(db[k]))
       .map(k=>({
         user_id:currentUser.id,
         record_date:k,
@@ -446,14 +450,24 @@ function getWeekDays(){
   });
 }
 
-function getRecord(k){
-  if(!db[k])db[k]={
-    done:false,
-    exercises:{},
-    notes:'',
-    checkin:{}
-  };
-  return db[k];
+function emptyRecord(){
+  return {done:false,exercises:{},notes:'',checkin:{}};
+}
+
+function getRecord(k,create=true){
+  if(!db[k]&&create)db[k]=emptyRecord();
+  return db[k]||emptyRecord();
+}
+
+function recordHasData(r){
+  if(!r)return false;
+  if(r.done)return true;
+  if(String(r.notes||'').trim())return true;
+  if(r.checkin && (r.checkin.weight!==''&&r.checkin.weight!=null || r.checkin.energy!==''&&r.checkin.energy!=null))return true;
+  const exercises=r.exercises||{};
+  return Object.values(exercises).some(sets=>Array.isArray(sets)&&sets.some(s=>
+    s && (s.done===true || s.weight!==''&&s.weight!=null || s.reps!==''&&s.reps!=null)
+  ));
 }
 
 function render(){
@@ -707,7 +721,7 @@ function clearHistoryFilter(){
 
 function getHistoryRows(){
   return Object.keys(db)
-    .filter(k=>/^\d{4}-\d\d-\d\d$/.test(k))
+    .filter(k=>/^\d{4}-\d\d-\d\d$/.test(k) && recordHasData(db[k]))
     .sort((a,b)=>b.localeCompare(a))
     .map(k=>({date:k,data:db[k]}));
 }
@@ -762,7 +776,7 @@ function historyRender(){
 
   if(!rows.length){
     $('historyList').innerHTML=
-      '<div class="empty">Nenhum treino encontrado.</div>';
+      '<div class="empty">Nenhum treino registrado ainda.</div>';
     return;
   }
 
@@ -860,17 +874,16 @@ async function adminLoadUsers(){
           <small>${u.role==='admin'?'Administrador':'Usuário'}</small>
         </div>
 
-        <select onchange="adminUpdateUser('${u.id}','role',this.value)">
-          <option value="user" ${u.role==='user'?'selected':''}>Usuário</option>
-          <option value="admin" ${u.role==='admin'?'selected':''}>Admin</option>
-        </select>
+        <div>
+          <span class="badge">${u.role==='admin'?'Administrador':'Usuário'}</span>
+        </div>
 
-        <select onchange="adminUpdateUser('${u.id}','status',this.value)">
+        <select ${u.id===currentUser.id?'disabled':''} onchange="adminUpdateUser('${u.id}','status',this.value)">
           <option value="active" ${u.status==='active'?'selected':''}>Ativo</option>
           <option value="blocked" ${u.status==='blocked'?'selected':''}>Bloqueado</option>
         </select>
 
-        <button class="btn danger" onclick="adminDeleteUser('${u.id}')">
+        <button class="btn danger" ${u.id===currentUser.id?'disabled':''} onclick="adminDeleteUser('${u.id}')">
           Excluir
         </button>
       </div>
@@ -882,6 +895,15 @@ async function adminLoadUsers(){
 }
   async function adminUpdateUser(id,field,value){
   if(currentProfile?.role!=='admin')return;
+  if(field==='role'){
+    $('adminMsg').textContent='O único administrador é a conta principal.';
+    return;
+  }
+  if(id===currentUser.id){
+    $('adminMsg').textContent='Você não pode bloquear a própria conta.';
+    adminLoadUsers();
+    return;
+  }
 
   try{
     const update={};
