@@ -1,4 +1,4 @@
-const CACHE = 'treino-zedrax-v3';
+const CACHE = 'treino-zedrax-v5';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', event => {
