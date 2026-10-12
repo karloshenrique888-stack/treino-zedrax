@@ -7,6 +7,8 @@
 .authscreen{min-height:100vh;display:grid;place-items:center;padding:18px;background:var(--bg)}
 .authbox{width:min(430px,100%);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 20px 60px #0008}
 .authbox h1{margin:0 0 5px}.authbox p{margin:0 0 16px}.authform{display:grid;gap:10px}.authform label{display:grid;gap:5px;color:var(--muted);font-size:13px}.authform input,.authform select{background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:11px}.authmsg{min-height:20px;color:#ffb4b4;font-size:13px;margin-top:8px}.authswitch{display:flex;gap:7px;margin-top:12px}.authswitch button{flex:1}.adminbtn{margin-left:auto}.adminsection{margin-top:12px}.adminrow{display:grid;grid-template-columns:1.5fr .8fr .8fr auto;gap:8px;align-items:center}.adminrow select{background:#080c11;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:7px}@media(max-width:700px){.adminrow{grid-template-columns:1fr 1fr}.adminrow .email{grid-column:1/-1}}
+
+.setupScreen{min-height:100vh;display:grid;place-items:center;padding:18px}.setupBox{width:min(760px,100%);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px}.setupGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.setupGrid label{display:grid;gap:5px;color:var(--muted);font-size:13px}.setupGrid input,.setupGrid select,.setupGrid textarea{width:100%;background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:9px;padding:10px}.setupGrid .wide{grid-column:1/-1}.avatarCard{display:flex;gap:14px;align-items:center;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0}.bodyAvatar{width:74px;height:100px;display:grid;place-items:center;flex-shrink:0}.bodyAvatar svg{height:100%;max-width:100%}.personalWrap{max-width:1050px;margin:auto;padding:12px}.personalGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.personalStudent{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px}.personalStudent h3{margin:0 0 6px}.personalStudent label{display:grid;gap:4px;font-size:12px;color:var(--muted);margin-top:7px}.personalStudent input{background:#080c11;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px;min-width:0}.personalSearch{display:flex;gap:8px;margin:10px 0}.personalSearch input{flex:1;min-width:0;background:#080c11;color:var(--txt);border:1px solid var(--line);border-radius:9px;padding:10px}.exerciseDemo{display:none;margin-top:9px;max-width:100%;width:260px;border-radius:10px;border:1px solid var(--line)}.exerciseDemo.visible{display:block}.exhead .btn{white-space:nowrap}@media(max-width:650px){.setupGrid,.personalGrid{grid-template-columns:1fr}.setupGrid .wide{grid-column:auto}.personalSearch{flex-direction:column}}
 </style><link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#ff63b3">
 <meta name="mobile-web-app-capable" content="yes">
@@ -44,9 +46,10 @@
     <div id="authMsg" class="authmsg"></div>
   </div>
 </div>
+<section id="profileSetup" class="setupScreen hidden"><div class="setupBox"><div class="logo">T</div><h1>Identificação do perfil</h1><p class="muted">Preencha seus dados. Seu acesso será liberado após a validação do administrador.</p><div class="setupGrid"><label>Nome completo<input id="setupName" autocomplete="name" required></label><label>Perfil<select id="setupRole" onchange="setupRoleChanged()"><option value="aluno">Aluno(a)</option><option value="personal">Personal trainer</option></select></label><label>Sexo para configurar o plano<select id="setupSex"><option value="">Selecione</option><option value="feminino">Feminino</option><option value="masculino">Masculino</option></select></label><label>Peso atual (kg)<input id="setupWeight" type="number" min="20" max="500" step="0.1"></label><label>Altura (cm)<input id="setupHeight" type="number" min="80" max="250" step="0.5"></label><label id="setupInstructorWrap">Indicar personal<select id="setupInstructor"><option value="">Sem indicação por enquanto</option></select></label><div class="wide"><h3>Bioimpedância (opcional)</h3></div><label>% de gordura<input id="setupFat" type="number" min="0" max="80" step="0.1"></label><label>Massa muscular (kg)<input id="setupMuscle" type="number" min="0" step="0.1"></label><label>Gordura visceral<input id="setupVisceral" type="number" min="0" step="0.1"></label><label>Taxa metabólica basal (kcal)<input id="setupBmr" type="number" min="0" step="1"></label><label class="wide">Observações da bioimpedância<textarea id="setupBioNotes" rows="2" placeholder="Data do exame, aparelho ou outras informações (opcional)"></textarea></label></div><div class="modalactions"><button class="btn primary" onclick="completeOnboarding()">Enviar para aprovação</button><button class="btn" onclick="logout()">Sair</button></div><div id="setupMsg" class="authmsg"></div></div></section>
 <div id="start" class="start"><div><div class="logo" style="margin:auto">T</div><h1>Como vamos treinar?</h1><p class="muted">Escolha seu perfil para abrir o treino.</p><div class="choices"><button class="gender" onclick="choose('homem')"><i>♂</i><b>Homem</b><span>Plano masculino</span></button><button class="gender" onclick="choose('mulher')"><i>♀</i><b>Mulher</b><span>Plano feminino</span></button></div></div></div>
-<div id="app" class="app hidden"><header><div class="brand"><div class="logo">T</div><div><h1>TREINO ZEDRAX</h1><small id="subtitle"></small></div></div><div style="display:flex;gap:7px;align-items:center"><button id="adminBtn" class="btn hidden" onclick="showAdmin()">⚙️ ADM</button><button class="btn" onclick="logout()">Sair</button></div></header>
-<div class="tabs"><button id="tt" class="tab active" onclick="tab('treino')">🏋️ Treino</button><button id="th" class="tab" onclick="tab('historico')">📚 Histórico</button></div>
+<div id="app" class="app hidden"><header><div class="brand"><div class="logo">T</div><div><h1>TREINO ZEDRAX</h1><small id="subtitle"></small></div></div><div style="display:flex;gap:7px;align-items:center"><button id="adminBtn" class="btn hidden" onclick="showAdmin()">⚙️ ADM</button><button id="personalBtn" class="btn hidden" onclick="selectedStudentId?backToPersonal():showPersonalDashboard()">👥 Meus alunos</button><button class="btn" onclick="logout()">Sair</button></div></header>
+<div id="avatarCard" class="avatarCard hidden"><div id="bodyAvatar" class="bodyAvatar"></div><div><b id="avatarTitle">Seu avatar</b><div id="avatarInfo" class="muted">Baseado nas medidas registradas</div></div></div><div class="tabs"><button id="tt" class="tab active" onclick="tab('treino')">🏋️ Treino</button><button id="th" class="tab" onclick="tab('historico')">📚 Histórico</button></div>
 <section id="treino">
 <div class="week"><div class="weektop"><div><div class="muted">SEMANA</div><h2 id="week"></h2><div class="muted" id="range"></div></div><div class="nav"><button class="btn" onclick="move(-1)">←</button><button class="btn primary" onclick="today()">Hoje</button><button class="btn" onclick="move(1)">→</button></div></div><div class="stats"><div class="stat"><small>Treinos</small><b id="done">0/5</b></div><div class="stat"><small>Séries</small><b id="sets">0</b></div><div class="stat"><small>Peso</small><b id="weight">—</b></div></div></div>
 <div id="days" class="days"></div>
@@ -55,7 +58,8 @@
 <div class="finish"><button class="btn primary" onclick="finish()">✓ Finalizar dia</button></div>
 </section>
 <section id="historico" class="hidden"><div class="card"><div class="title"><div><h3>📊 Histórico</h3><div class="muted">Escolha exatamente o período que quer analisar.</div></div></div><div class="datefilter"><label>De<input id="hFrom" type="date" onchange="historyRender()"></label><label>Até<input id="hTo" type="date" onchange="historyRender()"></label></div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:8px"><button class="btn" onclick="setHistoryPeriod(30)">Últimos 30 dias</button><button class="btn" onclick="setHistoryPeriod(90)">Últimos 90 dias</button><button class="btn" onclick="setHistoryPeriod(7)">Últimos 7 dias</button></div></div><div class="card"><h3>🎯 Exercícios no período</h3><div class="hint">Quantidade de dias de exercício previstos e realizados dentro do período escolhido.</div><div id="historySummary" class="historysummary"></div></div><div class="card"><h3>⚖️ Peso e medida</h3><div class="hint">Mostra o primeiro e o último registro de peso/medida encontrados dentro do período.</div><div id="weightNumbers" class="evoNumbers"></div></div><div class="card"><h3>📅 Dias do período</h3><div class="hint">Em cada dia você verá se o treino foi feito, se cumpriu o combinado, comentários e medidas registradas.</div><div id="trainingStats" class="historydays"></div></div></section>
-</div><section id="adminPanel" class="app hidden">
+</div><section id="personalPanel" class="personalWrap hidden"><header><div class="brand"><div class="logo">T</div><div><h1>TREINO ZEDRAX · PERSONAL</h1><small id="personalWelcome"></small></div></div><button class="btn" onclick="logout()">Sair</button></header><div class="card"><h2>Meus alunos</h2><div class="statslist"><div><small>Alunos ativos</small><b id="personalStudentCount">0</b></div><div><small>Receita mensal prevista</small><b id="personalRevenue">R$ 0,00</b></div><div><small>Encerramentos próximos</small><b id="personalEnding">0</b></div></div><div class="personalSearch"><input id="studentSearch" placeholder="Buscar aluno aprovado por nome ou e-mail"><button class="btn primary" onclick="searchAndLinkStudent()">Buscar e vincular</button></div><div id="personalSearchResults"></div></div><div class="card"><h3>Alunos vinculados</h3><div class="hint">Abra um aluno para editar seu treino. Defina início, previsão de saída e valor mensal para controlar o acompanhamento e seus recebimentos.</div><div id="personalStudents" class="personalGrid"></div></div><div class="card hidden" id="personalBioEditor"><h3>Bioimpedância do aluno</h3><div id="personalBioName" class="muted"></div><div class="setupGrid"><label>Peso (kg)<input id="editStudentWeight" type="number" step="0.1"></label><label>Altura (cm)<input id="editStudentHeight" type="number" step="0.5"></label><label>% gordura<input id="editStudentFat" type="number" step="0.1"></label><label>Massa muscular (kg)<input id="editStudentMuscle" type="number" step="0.1"></label><label>Gordura visceral<input id="editStudentVisceral" type="number" step="0.1"></label><label>Taxa metabólica basal<input id="editStudentBmr" type="number" step="1"></label></div><div class="modalactions"><button class="btn primary" onclick="saveStudentBio()">Salvar medidas</button><button class="btn" onclick="closeStudentBio()">Fechar</button></div></div></section>
+<section id="adminPanel" class="app hidden">
   <div class="card adminsection">
     <div class="title"><div><h3>⚙️ Administração</h3><div class="muted">Usuários do TREINO ZEDRAX</div></div><button class="btn" onclick="hideAdmin()">Voltar</button></div>
     <div id="adminList" class="mini">Carregando...</div>
@@ -112,15 +116,22 @@ function exerciseList(i){
   let d=get(i);
   return exerciseListDate(key(i),d.code,i);
 }
-function choose(g){profile=(g==='mulher'||g==='feminino')?'mulher':'homem';localStorage.setItem('perfilTreino',profile);if(currentUser){const sex=profile==='homem'?'masculino':'feminino';sb.from('profiles').update({sex}).eq('id',currentUser.id).then(({error})=>{if(error)console.warn('Não foi possível salvar o perfil:',error)});}start.classList.add('hidden');app.classList.remove('hidden');app.className='app '+(profile==='mulher'?'female':'');subtitle.textContent=profile==='mulher'?'Plano feminino':'Plano masculino';render();queueSync()}function changeProfile(){app.classList.add('hidden');start.classList.remove('hidden')}function tab(x){treino.classList.toggle('hidden',x!=='treino');historico.classList.toggle('hidden',x!=='historico');tt.classList.toggle('active',x==='treino');th.classList.toggle('active',x==='historico');if(x==='historico')historyRender()}
+function choose(g){profile=(g==='mulher'||g==='feminino')?'mulher':'homem';localStorage.setItem('perfilTreino',profile);if(currentUser&&!selectedStudentId){const sex=profile==='homem'?'masculino':'feminino';sb.from('profiles').update({sex}).eq('id',currentUser.id).then(({error})=>{if(error)console.warn('Não foi possível salvar o perfil:',error)});}document.getElementById('profileSetup').classList.add('hidden');document.getElementById('personalPanel').classList.add('hidden');document.getElementById('adminPanel').classList.add('hidden');start.classList.add('hidden');app.classList.remove('hidden');app.className='app '+(profile==='mulher'?'female':'');subtitle.textContent=selectedStudentProfile?'Acompanhando: '+(selectedStudentProfile.full_name||selectedStudentProfile.email):(profile==='mulher'?'Plano feminino':'Plano masculino');render();renderAvatar();queueSync()}function changeProfile(){app.classList.add('hidden');start.classList.remove('hidden')}function tab(x){treino.classList.toggle('hidden',x!=='treino');historico.classList.toggle('hidden',x!=='historico');tt.classList.toggle('active',x==='treino');th.classList.toggle('active',x==='historico');if(x==='historico')historyRender()}
 function isTimeExercise(x){
   const text=(x.name+' '+x.pres).toLowerCase();
-  // Somente exercícios de duração usam tempo. Abdominal e panturrilha são por repetições.
+  // Duração: somente prancha e atividades cardiovasculares.
+  // Abdominal e panturrilha são sempre registrados por repetições.
   return /prancha|bicicleta|bike|elíptico|eliptico|corrida|caminhada|esteira|cardio/.test(text);
 }
+function isSingleRepExercise(x){
+  const text=(x.name||'').toLowerCase();
+  return /abdominal|panturrilha/.test(text);
+}
 function exerciseSetCount(x){
+  if(isTimeExercise(x)||isSingleRepExercise(x)) return 1;
   const m=String(x.pres||'').match(/^(\d+)\s*x\s*/i);
-  return m?Number(m[1]):1;
+  // Exercícios de musculação têm no mínimo 3 registros de série.
+  return Math.max(3,m?Number(m[1]):1);
 }
 function render(){
   const weekEl=document.getElementById('week'),rangeEl=document.getElementById('range'),daysEl=document.getElementById('days');
@@ -141,7 +152,7 @@ function render(){
   doneEl.textContent=done+'/5';
   setsEl.textContent=sets;
   let c=weekCheck();weightEl.textContent=c?.weight?c.weight+' kg':'—';
-  renderDay();renderMini();
+  renderDay();renderMini();renderAvatar();
 }
 function renderDay(){
   const dayEl=document.getElementById('day'),nameEl=document.getElementById('name'),focusEl=document.getElementById('focus'),stateEl=document.getElementById('state'),notesEl=document.getElementById('notes'),listEl=document.getElementById('list');
@@ -155,18 +166,22 @@ function renderDay(){
   notesEl.value=d.notes||'';
   let h='';
   exerciseList(sel).forEach((x)=>{
-    const time=isTimeExercise(x),n=exerciseSetCount(x),unit=/min/i.test(x.pres)?'min':(/seg|\bs\b/i.test(x.pres)?'s':'tempo');
+    const time=isTimeExercise(x),singleRep=isSingleRepExercise(x),n=exerciseSetCount(x);
+    const unit=/min/i.test(x.pres)?'min':(/seg|\bs\b/i.test(x.pres)?'s':'tempo');
     let r='';
     for(let s=0;s<n;s++){
       let v=d.sets[x.id+'-'+s]||{};
       if(time){
-        r+=`<div class="set"><span>${s+1}</span><input type="number" step="1" min="0" inputmode="numeric" placeholder="tempo" value="${v.time??''}" onchange="setv('${x.id}',${s},'time',this.value)"><span class="muted">${unit||'tempo'}</span><input class="check" type="checkbox" ${v.ok?'checked':''} onchange="setv('${x.id}',${s},'ok',this.checked)"></div>`;
+        r+=`<div class="set"><span>•</span><input type="number" step="1" min="0" inputmode="numeric" placeholder="tempo" value="${v.time??''}" onchange="setv('${x.id}',${s},'time',this.value)"><span class="muted">${unit||'tempo'}</span><input class="check" type="checkbox" ${v.ok?'checked':''} onchange="setv('${x.id}',${s},'ok',this.checked)"></div>`;
+      }else if(singleRep){
+        r+=`<div class="set"><span>•</span><input type="number" step="1" min="0" placeholder="repetições" value="${v.reps??''}" onchange="setv('${x.id}',${s},'reps',this.value)"><span class="muted">reps</span><input class="check" type="checkbox" ${v.ok?'checked':''} onchange="setv('${x.id}',${s},'ok',this.checked)"></div>`;
       }else{
         r+=`<div class="set"><span>${s+1}</span><input type="number" step="5" min="0" placeholder="kg" value="${v.kg??''}" onchange="setv('${x.id}',${s},'kg',this.value)"><input type="number" step="1" min="0" placeholder="reps" value="${v.reps??''}" onchange="setv('${x.id}',${s},'reps',this.value)"><input class="check" type="checkbox" ${v.ok?'checked':''} onchange="setv('${x.id}',${s},'ok',this.checked)"></div>`;
       }
     }
     const displayPres=time && /x/i.test(x.pres) && !/min|seg|\bs\b/i.test(x.pres)?String(x.pres).replace(/\d+\s*x\s*.*/i,n+' x tempo'):x.pres;
-    h+=`<div class="exercise"><div class="exhead"><div><div class="ex">${x.name}</div><div class="meta">${displayPres}</div></div><button class="btn iconbtn danger" onclick="openDelete('${x.id}',${x.base?'true':'false'},${x.recurring?'true':'false'})">Excluir</button></div>${r}</div>`;
+    const demoId='demo-'+String(x.id).replace(/[^a-zA-Z0-9_-]/g,'');
+    h+=`<div class="exercise"><div class="exhead"><div><div class="ex">${x.name}</div><div class="meta">${displayPres}</div><button class="btn iconbtn" onclick="toggleExerciseDemo('${demoId}','${escapeHtml(x.name).replace(/'/g,"\\'")}')">▶ Ver demonstração</button></div><button class="btn iconbtn danger" onclick="openDelete('${x.id}',${x.base?'true':'false'},${x.recurring?'true':'false'})">Excluir</button></div><img id="${demoId}" class="exerciseDemo" alt="Demonstração animada de ${escapeHtml(x.name)}">${r}</div>`;
   });
   listEl.innerHTML=h;
 }
@@ -186,11 +201,13 @@ function updateAddMetric(){
 function addExercise(){
   let n=document.getElementById('newName').value.trim(),s=Math.max(1,+document.getElementById('newSets').value||1),r=Math.max(1,+document.getElementById('newReps').value||10),metric=document.getElementById('newMetric').value,scope=document.getElementById('newScope').value;
   if(!n){toast('Digite o nome do exercício');return}
-  const timeLike=/abdominal|prancha|bicicleta|bike|elíptico|eliptico|corrida|caminhada|esteira|cardio/i.test(n);
-  if(timeLike)metric='time';
+  const timeLike=/prancha|bicicleta|bike|elíptico|eliptico|corrida|caminhada|esteira|cardio/i.test(n);
+  const singleRepLike=/abdominal|panturrilha/i.test(n);
+  if(timeLike) metric='time';
+  if(singleRepLike) metric='reps';
   let id='custom-'+Date.now();
-  let x={id,name:n,pres:metric==='time'?(s+' x tempo'):(s+' x '+r)};
-  if(metric==='time' && s===1)x.pres='tempo';
+  let x={id,name:n,pres:metric==='time'?'tempo':(singleRepLike?'1 x '+r:(Math.max(3,s)+' x '+r))};
+  if(metric==='time')x.pres='tempo';
   if(scope==='once'){get(sel).custom.push(x)}else{let rr=recurring();rr[sel]=rr[sel]||[];rr[sel].push({...x,from:key(sel)})}
   persist();closeModal();render();toast('Exercício adicionado!')
 }
@@ -215,30 +232,55 @@ for(let d=new Date(from+'T12:00:00');d<=new Date(to+'T12:00:00');d.setDate(d.get
   const date=d.toISOString().slice(0,10),dow=d.getDay();
   records.push({date,dow,rec:db[date]||null});
 }
-let plannedDays=records.filter(x=>x.dow>=1&&x.dow<=5).length;
 let plannedRecords=records.filter(x=>x.dow>=1&&x.dow<=5);
+let plannedDays=plannedRecords.length;
 let realizedDays=plannedRecords.filter(x=>x.rec?.done).length;
-let measures=records.filter(x=>x.rec&&(x.rec.weight!=null||x.rec.waist!=null));
+let measures=records.filter(x=>x.rec&&(x.rec.weight!=null||x.rec.waist!=null)).sort((a,b)=>a.date.localeCompare(b.date));
 let firstM=measures[0],lastM=measures[measures.length-1];
 let firstLabel=firstM?fmtDate(firstM.date):'—',lastLabel=lastM?fmtDate(lastM.date):'—';
-function measureText(item){if(!item||!item.rec)return 'Sem registro';let a=item.rec.weight!=null?item.rec.weight+' kg':'Peso —';let b=item.rec.waist!=null?item.rec.waist+' cm':'Medida —';return a+' • '+b}
+function measureText(item){
+  if(!item||!item.rec)return 'Sem registro';
+  const a=item.rec.weight!=null?item.rec.weight+' kg':'Peso —';
+  const b=item.rec.waist!=null?item.rec.waist+' cm':'Medida —';
+  return a+' • '+b;
+}
 let firstText=firstM?measureText(firstM):'Sem registro';
 let lastText=lastM?measureText(lastM):'Sem registro';
-historySummary.innerHTML=`<div><b>${plannedDays}</b><small>dias de exercício previstos</small></div><div><b>${realizedDays}</b><small>dias de exercício realizados</small></div><div><b>${realizedDays} / ${plannedDays}</b><small>realizados / previstos</small></div>`;
-weightNumbers.innerHTML=`<div><b>${firstText}</b><small>Primeiro registro • ${firstLabel}</small></div><div><b>${lastText}</b><small>Último registro • ${lastLabel}</small></div>`;
+historySummary.innerHTML=
+`<div><b>${plannedDays}</b><small>dias de exercício previstos</small></div>`+
+`<div><b>${realizedDays}</b><small>dias de exercício realizados</small></div>`+
+`<div><b>${realizedDays} / ${plannedDays}</b><small>realizados / previstos</small></div>`;
+weightNumbers.innerHTML=
+`<div><b>${firstText}</b><small>Primeiro registro do período • ${firstLabel}</small></div>`+
+`<div><b>${lastText}</b><small>Último registro do período • ${lastLabel}</small></div>`;
 trainingStats.innerHTML=records.map(item=>{
   const {date,dow,rec}=item;
-  if(dow===0||dow===6)return `<div class="historyday"><div class="historydaytop"><div class="historydaydate">${new Date(date+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'})}</div><div class="historystatus future">Sem treino previsto</div></div></div>`;
+  const labelDate=new Date(date+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'});
+  if(dow===0||dow===6){
+    const weekendMeasure=(rec&&(rec.weight!=null||rec.waist!=null))?measureText(item):'Sem medida';
+    const weekendComment=rec?.notes?.trim()?rec.notes.trim():'Nenhum comentário';
+    return `<div class="historyday"><div class="historydaytop"><div class="historydaydate">${labelDate}</div><div class="historystatus future">Sem treino previsto</div></div>${(weekendMeasure!=='Sem medida'||weekendComment!=='Nenhum comentário')?`<div class="historydetails"><div><small>Medidas</small><b>${weekendMeasure}</b></div><div><small>Comentário</small><b>${weekendComment}</b></div></div>`:''}</div>`;
+  }
   const weekday=dow-1,code=plans()[weekday][0],expected=exerciseListDate(date,code,weekday);
-  const checked=expected.reduce((n,x)=>n+exerciseSetCount(x),0);
-  const done=rec?Object.entries(rec.sets||{}).filter(([k,v])=>v&&v.ok&&expected.some(x=>k.startsWith(x.id+'-'))).length:0;
-  const allDone=checked>0&&done>=checked;
-  const partial=done>0&&!allDone;
-  const status=allDone?'Feito':partial?'Parcial':rec?.done?'Finalizado sem séries marcadas':'Não feito';
+  const plannedExerciseCount=expected.length;
+  const plannedRows=expected.reduce((n,x)=>n+exerciseSetCount(x),0);
+  const doneRows=rec?Object.entries(rec.sets||{}).filter(([k,v])=>v&&v.ok&&expected.some(x=>k.startsWith(x.id+'-'))).length:0;
+  const allDone=plannedRows>0&&doneRows>=plannedRows;
+  const partial=doneRows>0&&!allDone;
+  const status=allDone?'Feito — combinado cumprido':partial?'Parcial — combinado não cumprido':rec?.done?'Finalizado sem registros':'Não feito';
   const cls=allDone?'ok':partial?'partial':rec?.done?'partial':'no';
   const comment=rec?.notes?.trim()?rec.notes.trim():'Nenhum comentário';
   const measure=rec&&(rec.weight!=null||rec.waist!=null)?measureText(item):'Sem medida';
-  return `<div class="historyday"><div class="historydaytop"><div class="historydaydate">${new Date(date+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'})} • Treino ${code}</div><div class="historystatus ${cls}">${status}</div></div><div class="historydetails"><div><small>Combinado</small><b>${done} / ${checked} séries</b></div><div><small>Medidas</small><b>${measure}</b></div><div><small>Treino</small><b>${rec?.done?'Realizado':'Não realizado'}</b></div></div><div class="historycomment"><b>Comentário:</b> ${comment}</div></div>`;
+  return `<div class="historyday">
+    <div class="historydaytop"><div class="historydaydate">${labelDate} • Treino ${code}</div><div class="historystatus ${cls}">${status}</div></div>
+    <div class="historydetails">
+      <div><small>Exercícios previstos</small><b>${plannedExerciseCount}</b></div>
+      <div><small>Registros cumpridos</small><b>${doneRows} / ${plannedRows}</b></div>
+      <div><small>Treino</small><b>${rec?.done?'Realizado':'Não realizado'}</b></div>
+      <div><small>Medidas</small><b>${measure}</b></div>
+    </div>
+    <div class="historycomment"><b>Comentário:</b> ${comment}</div>
+  </div>`;
 }).join('')||'<div class="empty">Nenhum dia no período.</div>'
 }
 function clearF(){setHistoryPeriod(30)}function toast(t){let x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1500)}
@@ -277,19 +319,38 @@ async function resetPassword(){
 function setAuthMsg(t,ok=false){const x=document.getElementById('authMsg');x.textContent=t;x.style.color=ok?'#b9ff9b':'#ffb4b4'}
 async function logout(){await sb.auth.signOut();location.reload()}
 async function startSession(user){
+  if(currentUser?.id===user.id && currentProfile)return;
   currentUser=user;
   const {data:prof,error}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
-  if(error||!prof){setAuthMsg('Erro ao carregar perfil: '+(error?.message||'nenhum perfil encontrado'));await sb.auth.signOut();return}
-  if(prof.status!=='active'){setAuthMsg('Esta conta está bloqueada.');await sb.auth.signOut();return}
+  if(error||!prof){setAuthMsg('Erro ao carregar perfil: '+(error?.message||'nenhum perfil encontrado'));await sb.auth.signOut();currentUser=null;return}
   currentProfile=prof;
-  await loadCloud();
   document.getElementById('auth').classList.add('hidden');
-  if(prof.role==='admin')document.getElementById('adminBtn').classList.remove('hidden');
-  if(prof.sex==='homem'||prof.sex==='mulher'||prof.sex==='masculino'||prof.sex==='feminino') choose(prof.sex==='masculino'?'homem':prof.sex==='feminino'?'mulher':prof.sex); else {start.classList.remove('hidden');app.classList.add('hidden');}
+  if(prof.role==='admin' || (user.email||'').toLowerCase()==='karloshenrique888@gmail.com'){
+    document.getElementById('adminBtn').classList.remove('hidden');
+    document.getElementById('profileSetup').classList.add('hidden');
+    await loadCloud();
+    if(prof.sex==='masculino'||prof.sex==='homem'||prof.sex==='feminino'||prof.sex==='mulher')choose(prof.sex==='feminino'||prof.sex==='mulher'?'mulher':'homem');
+    else {profile='homem';choose('homem')}
+    return;
+  }
+  if(!prof.profile_completed){await showOnboarding(prof);return;}
+  if(prof.status!=='active'){
+    setAuthMsg('Seu cadastro foi enviado. O acesso só será liberado após a aprovação do administrador.');
+    await sb.auth.signOut();currentUser=null;currentProfile=null;return;
+  }
+  if(prof.role==='personal'){
+    document.getElementById('personalBtn').classList.remove('hidden');
+    showPersonalDashboard();return;
+  }
+  selectedStudentId=null;selectedStudentProfile=null;
+  await loadCloud();
+  profile=(prof.sex==='feminino'||prof.sex==='mulher')?'mulher':'homem';localStorage.setItem('perfilTreino',profile);
+  choose(profile);
 }
-async function loadCloud(){
-  const {data:settings}=await sb.from('user_settings').select('data').eq('user_id',currentUser.id).maybeSingle();
-  const {data:rows,error}=await sb.from('daily_records').select('record_date,data').eq('user_id',currentUser.id).order('record_date');
+async function loadCloud(targetId=null){
+  const ownerId=targetId||currentUser.id;
+  const {data:settings}=await sb.from('user_settings').select('data').eq('user_id',ownerId).maybeSingle();
+  const {data:rows,error}=await sb.from('daily_records').select('record_date,data').eq('user_id',ownerId).order('record_date');
   if(error){setAuthMsg('Erro ao carregar seus dados.');return}
   const localBefore=JSON.parse(localStorage.getItem('meuTreinoV4')||'{}');
   const cloud={};(rows||[]).forEach(r=>cloud[r.record_date]=r.data||{});
@@ -305,23 +366,71 @@ async function loadCloud(){
 function queueSync(){if(!currentUser)return;clearTimeout(syncTimer);syncTimer=setTimeout(syncNow,700)}
 async function syncNow(){
   if(!currentUser)return;
-  const rows=Object.keys(db).filter(k=>/^\d{4}-\d\d-\d\d$/.test(k)).map(k=>({user_id:currentUser.id,record_date:k,data:db[k]}));
+  const ownerId=selectedStudentId||currentUser.id;
+  const rows=Object.keys(db).filter(k=>/^\d{4}-\d\d-\d\d$/.test(k)).map(k=>({user_id:ownerId,record_date:k,data:db[k]}));
   if(rows.length){const {error}=await sb.from('daily_records').upsert(rows,{onConflict:'user_id,record_date'});if(error){console.warn(error);return}}
   const settings={profile,recurring:db._recurring?.[profile]||{},hidden:db._hiddenForever?.[profile]||{}};
-  await sb.from('user_settings').upsert({user_id:currentUser.id,data:settings},{onConflict:'user_id'});
+  await sb.from('user_settings').upsert({user_id:ownerId,data:settings},{onConflict:'user_id'});
 }
 async function showAdmin(){
-  if(currentProfile?.role!=='admin')return;
-  document.getElementById('app').classList.add('hidden');document.getElementById('start').classList.add('hidden');document.getElementById('historico').classList.add('hidden');document.getElementById('treino').classList.add('hidden');document.getElementById('adminPanel').classList.remove('hidden');
-  const {data,error}=await sb.from('profiles').select('id,email,sex,role,status,created_at').order('created_at',{ascending:true});
-  const box=document.getElementById('adminList');if(error){box.textContent='Não foi possível carregar os usuários.';return}
-  box.innerHTML=(data||[]).map(u=>`<div class="row adminrow"><div class="email"><b>${escapeHtml(u.email||'')}</b><small>${new Date(u.created_at).toLocaleDateString('pt-BR')}</small></div><select onchange="adminSetStatus('${u.id}',this.value)" ${u.id===currentUser.id?'disabled':''}><option value="active" ${u.status==='active'?'selected':''}>Ativo</option><option value="blocked" ${u.status==='blocked'?'selected':''}>Bloqueado</option></select><select onchange="adminSetRole('${u.id}',this.value)" ${u.id===currentUser.id?'disabled':''}><option value="user" ${u.role==='user'?'selected':''}>Usuário</option><option value="admin" ${u.role==='admin'?'selected':''}>ADM</option></select><button class="btn danger" onclick="adminDelete('${u.id}')" ${u.id===currentUser.id?'disabled':''}>Excluir</button></div>`).join('')||'<div class="empty">Nenhum usuário.</div>';
+  if(currentProfile?.role!=='admin' && (currentUser?.email||'').toLowerCase()!=='karloshenrique888@gmail.com')return;
+  document.getElementById('app').classList.add('hidden');document.getElementById('start').classList.add('hidden');document.getElementById('profileSetup').classList.add('hidden');document.getElementById('personalPanel').classList.add('hidden');document.getElementById('adminPanel').classList.remove('hidden');
+  const {data,error}=await sb.from('profiles').select('id,email,full_name,sex,role,requested_role,status,created_at,profile_completed').order('created_at',{ascending:true});
+  const box=document.getElementById('adminList');if(error){box.textContent='Não foi possível carregar os usuários: '+error.message;return}
+  box.innerHTML=(data||[]).map(u=>`<div class="row adminrow"><div class="email"><b>${escapeHtml(u.full_name||u.email||'')}</b><small>${escapeHtml(u.email||'')} · Solicita: ${escapeHtml(u.requested_role||u.role||'aluno')} · ${new Date(u.created_at).toLocaleDateString('pt-BR')}</small></div><select id="st-${u.id}"><option value="pending" ${u.status==='pending'?'selected':''}>Pendente</option><option value="active" ${u.status==='active'?'selected':''}>Aprovado/Ativo</option><option value="blocked" ${u.status==='blocked'?'selected':''}>Bloqueado</option></select><select id="role-${u.id}"><option value="aluno" ${(u.role==='aluno'||u.role==='user')?'selected':''}>Aluno</option><option value="personal" ${(u.role==='personal'||u.requested_role==='personal')?'selected':''}>Personal</option><option value="admin" ${u.role==='admin'?'selected':''}>ADM</option></select><button class="btn primary" onclick="adminReview('${u.id}')" ${u.id===currentUser.id?'disabled':''}>Salvar</button>${(u.role==='aluno'||u.role==='user')&&u.status==='active'?`<button class="btn" onclick="openStudent('${u.id}')">Ver treino</button>`:''}</div>`).join('')||'<div class="empty">Nenhum usuário.</div>';
 }
 function hideAdmin(){document.getElementById('adminPanel').classList.add('hidden');document.getElementById('app').classList.remove('hidden');if(profile)choose(profile)}
-function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-async function adminSetStatus(id,status){const {error}=await sb.from('profiles').update({status}).eq('id',id);if(error)toast('Não foi possível alterar o status.');else toast('Status atualizado.')}
-async function adminSetRole(id,role){const {error}=await sb.from('profiles').update({role}).eq('id',id);if(error)toast('Não foi possível alterar o perfil.');else toast('Perfil atualizado.')}
+async function adminReview(id){const status=document.getElementById('st-'+id).value,role=document.getElementById('role-'+id).value;const {error}=await sb.rpc('zedrax_admin_review_user',{p_user_id:id,p_status:status,p_role:role});if(error){toast('Não foi possível salvar: '+error.message);return}toast('Cadastro/perfil atualizado');showAdmin()}
+async function adminSetStatus(id,status){const {error}=await sb.rpc('zedrax_admin_review_user',{p_user_id:id,p_status:status,p_role:null});if(error)toast('Não foi possível alterar o status.');else showAdmin()}
+async function adminSetRole(id,role){const {error}=await sb.rpc('zedrax_admin_review_user',{p_user_id:id,p_status:'active',p_role:role});if(error)toast('Não foi possível alterar o perfil.');else showAdmin()}
 async function adminDelete(id){if(!confirm('Excluir este usuário definitivamente?'))return;const {error}=await sb.rpc('admin_delete_user',{target_user_id:id});if(error){toast('A exclusão precisa da função de administrador no banco.');console.error(error)}else{toast('Usuário excluído.');showAdmin()}}
+
+async function showOnboarding(prof){
+  document.getElementById('auth').classList.add('hidden');document.getElementById('start').classList.add('hidden');document.getElementById('app').classList.add('hidden');document.getElementById('adminPanel').classList.add('hidden');document.getElementById('personalPanel').classList.add('hidden');
+  document.getElementById('profileSetup').classList.remove('hidden');
+  document.getElementById('setupName').value=prof.full_name||currentUser.user_metadata?.full_name||'';
+  document.getElementById('setupSex').value=['masculino','feminino'].includes(prof.sex)?prof.sex:'';
+  document.getElementById('setupWeight').value=prof.weight_kg||'';document.getElementById('setupHeight').value=prof.height_cm||'';
+  document.getElementById('setupRole').value=['aluno','personal'].includes(prof.requested_role)?prof.requested_role:'aluno';
+  const {data:instructors}=await sb.from('profiles').select('id,full_name,email').eq('role','personal').eq('status','active').order('full_name');
+  document.getElementById('setupInstructor').innerHTML='<option value="">Sem indicação por enquanto</option>'+(instructors||[]).map(x=>`<option value="${x.id}">${escapeHtml(x.full_name||x.email)}</option>`).join('');
+  const b=prof.bioimpedance||{};document.getElementById('setupFat').value=b.body_fat_pct??'';document.getElementById('setupMuscle').value=b.muscle_mass_kg??'';document.getElementById('setupVisceral').value=b.visceral_fat??'';document.getElementById('setupBmr').value=b.bmr_kcal??'';document.getElementById('setupBioNotes').value=b.notes||'';setupRoleChanged();
+}
+function setupRoleChanged(){const personal=document.getElementById('setupRole').value==='personal';document.getElementById('setupInstructorWrap').classList.toggle('hidden',personal)}
+async function completeOnboarding(){
+  const name=document.getElementById('setupName').value.trim(),role=document.getElementById('setupRole').value,sex=document.getElementById('setupSex').value;
+  const n=id=>document.getElementById(id).value===''?null:Number(document.getElementById(id).value);
+  const bio={body_fat_pct:n('setupFat'),muscle_mass_kg:n('setupMuscle'),visceral_fat:n('setupVisceral'),bmr_kcal:n('setupBmr'),notes:document.getElementById('setupBioNotes').value.trim()};
+  const msg=document.getElementById('setupMsg');msg.textContent='Salvando...';
+  const {data,error}=await sb.rpc('zedrax_complete_profile',{p_full_name:name,p_requested_role:role,p_sex:sex,p_weight_kg:n('setupWeight'),p_height_cm:n('setupHeight'),p_bioimpedance:bio,p_instructor_id:role==='aluno'?(document.getElementById('setupInstructor').value||null):null});
+  if(error){msg.textContent='Não foi possível salvar: '+error.message;return}
+  msg.textContent='Cadastro enviado para aprovação. Você poderá entrar quando o administrador liberar seu acesso.';
+  await sb.auth.signOut();currentUser=null;currentProfile=null;setTimeout(()=>{document.getElementById('profileSetup').classList.add('hidden');document.getElementById('auth').classList.remove('hidden');showLogin();setAuthMsg('Cadastro enviado para aprovação. Entre novamente após a aprovação do administrador.',true)},1200);
+}
+
+let selectedStudentId=null,selectedStudentProfile=null,personalLinks=[];
+function moneyBR(v){return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
+async function showPersonalDashboard(){
+  if(currentProfile?.role!=='personal'&&currentProfile?.role!=='admin')return;
+  selectedStudentId=null;selectedStudentProfile=null;document.getElementById('app').classList.add('hidden');document.getElementById('start').classList.add('hidden');document.getElementById('profileSetup').classList.add('hidden');document.getElementById('adminPanel').classList.add('hidden');document.getElementById('personalPanel').classList.remove('hidden');
+  document.getElementById('personalWelcome').textContent=currentProfile.full_name||currentUser.email;
+  let query=sb.from('instructor_students').select('*').eq('active',true).order('start_date',{ascending:false});if(currentProfile.role!=='admin')query=query.eq('instructor_id',currentUser.id);
+  const {data:links,error}=await query; if(error){document.getElementById('personalStudents').innerHTML='<div class="empty">Erro ao carregar alunos: '+escapeHtml(error.message)+'</div>';return}personalLinks=links||[];
+  const ids=personalLinks.map(x=>x.student_id);let students=[];if(ids.length){const r=await sb.from('profiles').select('id,email,full_name,sex,weight_kg,height_cm,bioimpedance,status').in('id',ids);students=r.data||[]}
+  const byId=Object.fromEntries(students.map(x=>[x.id,x]));let revenue=personalLinks.reduce((a,x)=>a+Number(x.monthly_fee||0),0),ending=personalLinks.filter(x=>x.planned_end_date&&new Date(x.planned_end_date+'T12:00:00')<=new Date(Date.now()+30*86400000)).length;
+  document.getElementById('personalStudentCount').textContent=personalLinks.length;document.getElementById('personalRevenue').textContent=moneyBR(revenue);document.getElementById('personalEnding').textContent=ending;
+  document.getElementById('personalStudents').innerHTML=personalLinks.map(l=>{const st=byId[l.student_id]||{};return `<article class="personalStudent"><h3>${escapeHtml(st.full_name||st.email||'Aluno')}</h3><div class="muted">${escapeHtml(st.email||'')} · ${l.active?'Ativo':'Encerrado'}</div><div class="hint">Início: ${l.start_date||'—'} · Saída prevista: ${l.planned_end_date||'Não definida'} · Mensalidade: ${moneyBR(l.monthly_fee)}</div><div class="setupGrid"><label>Início<input id="link-start-${l.id}" type="date" value="${l.start_date||''}"></label><label>Saída prevista<input id="link-end-${l.id}" type="date" value="${l.planned_end_date||''}"></label><label>Valor mensal (R$)<input id="link-fee-${l.id}" type="number" min="0" step="0.01" value="${Number(l.monthly_fee||0)}"></label><label>Status<select id="link-active-${l.id}"><option value="true" ${l.active?'selected':''}>Ativo</option><option value="false" ${!l.active?'selected':''}>Encerrar</option></select></label></div><div class="modalactions"><button class="btn" onclick="editStudentBio('${st.id||l.student_id}')">Bioimpedância</button><button class="btn" onclick="saveContract('${l.id}')">Salvar vínculo</button><button class="btn primary" onclick="openStudent('${st.id||l.student_id}')">Abrir treino</button></div></article>`}).join('')||'<div class="empty">Nenhum aluno vinculado ainda.</div>';
+}
+async function searchAndLinkStudent(){const q=document.getElementById('studentSearch').value.trim();if(!q)return;let query=sb.from('profiles').select('id,email,full_name').eq('role','aluno').eq('status','active').eq('profile_completed',true).or(`email.ilike.%${q}%,full_name.ilike.%${q}%`).limit(10);const {data,error}=await query;const box=document.getElementById('personalSearchResults');if(error){box.textContent='Erro na busca: '+error.message;return}box.innerHTML=(data||[]).map(x=>`<div class="row"><b>${escapeHtml(x.full_name||x.email)}</b><div class="muted">${escapeHtml(x.email||'')}</div><button class="btn primary" onclick="linkStudent('${x.id}')">Vincular aluno</button></div>`).join('')||'<div class="empty">Nenhum aluno aprovado encontrado.</div>'}
+async function linkStudent(id){const {error}=await sb.rpc('zedrax_link_student',{p_student_id:id});if(error){toast('Não foi possível vincular: '+error.message);return}toast('Aluno vinculado');showPersonalDashboard()}
+async function saveContract(id){const start=document.getElementById('link-start-'+id).value||null,end=document.getElementById('link-end-'+id).value||null,fee=Number(document.getElementById('link-fee-'+id).value||0),active=document.getElementById('link-active-'+id).value==='true';const {error}=await sb.rpc('zedrax_update_contract',{p_link_id:id,p_start:start,p_planned_end:end,p_fee:fee,p_active:active});if(error){toast('Erro ao salvar vínculo: '+error.message);return}toast('Vínculo atualizado');showPersonalDashboard()}
+async function editStudentBio(id){const {data,error}=await sb.from('profiles').select('id,full_name,email,weight_kg,height_cm,bioimpedance').eq('id',id).maybeSingle();if(error||!data){toast('Não foi possível carregar as medidas');return}selectedStudentProfile=data;document.getElementById('personalBioEditor').classList.remove('hidden');document.getElementById('personalBioName').textContent=data.full_name||data.email;document.getElementById('editStudentWeight').value=data.weight_kg??'';document.getElementById('editStudentHeight').value=data.height_cm??'';const b=data.bioimpedance||{};document.getElementById('editStudentFat').value=b.body_fat_pct??'';document.getElementById('editStudentMuscle').value=b.muscle_mass_kg??'';document.getElementById('editStudentVisceral').value=b.visceral_fat??'';document.getElementById('editStudentBmr').value=b.bmr_kcal??''}
+function closeStudentBio(){document.getElementById('personalBioEditor').classList.add('hidden')}
+async function saveStudentBio(){if(!selectedStudentProfile)return;const n=id=>document.getElementById(id).value===''?null:Number(document.getElementById(id).value);const b={...(selectedStudentProfile.bioimpedance||{}),body_fat_pct:n('editStudentFat'),muscle_mass_kg:n('editStudentMuscle'),visceral_fat:n('editStudentVisceral'),bmr_kcal:n('editStudentBmr')};const {error}=await sb.from('profiles').update({weight_kg:n('editStudentWeight'),height_cm:n('editStudentHeight'),bioimpedance:b}).eq('id',selectedStudentProfile.id);if(error){toast('Não foi possível salvar: '+error.message);return}toast('Bioimpedância atualizada');closeStudentBio();showPersonalDashboard()}
+async function openStudent(id){const {data,error}=await sb.from('profiles').select('*').eq('id',id).maybeSingle();if(error||!data){toast('Não foi possível abrir o aluno');return}selectedStudentId=id;selectedStudentProfile=data;profile=(data.sex==='feminino'||data.sex==='mulher')?'mulher':'homem';localStorage.setItem('perfilTreino',profile);await loadCloud(id);document.getElementById('personalPanel').classList.add('hidden');document.getElementById('personalBtn').classList.remove('hidden');document.getElementById('avatarCard').classList.remove('hidden');choose(profile)}
+function toggleExerciseDemo(id,name){const img=document.getElementById(id);if(!img)return;if(img.classList.contains('visible')){img.classList.remove('visible');return}const map=[[/supino/i,'Bench_Press'],[/leg press/i,'Leg_Press'],[/puxada/i,'Lat_Pulldown'],[/remada/i,'Seated_Row'],[/hip thrust/i,'Hip_Thrust'],[/agachamento/i,'Smith_Machine_Squat'],[/prancha/i,'Plank'],[/rosca/i,'Biceps_Curl'],[/tríceps|triceps/i,'Triceps_Pushdown'],[/elevação lateral|elevacao lateral/i,'Lateral_Raise'],[/extensora/i,'Leg_Extension'],[/flexora/i,'Leg_Curl'],[/abdominal/i,'Crunch'],[/panturrilha/i,'Standing_Calf_Raise'],[/corrida|caminhada|esteira/i,'Treadmill'],[/bike|bicicleta|elíptica|eliptica/i,'Stationary_Bike']];const found=map.find(([re])=>re.test(name));if(!found){toast('Demonstração ainda não cadastrada para este exercício');return}img.src='https://api.anatome.dev/exerciseGif?id='+encodeURIComponent(found[1]);img.onerror=()=>{img.classList.remove('visible');toast('Demonstração indisponível no momento')};img.classList.add('visible')}
+function renderAvatar(){const card=document.getElementById('avatarCard');if(!card)return;const h=Number(selectedStudentProfile?.height_cm||currentProfile?.height_cm||0)/100,w=Number(selectedStudentProfile?.weight_kg||currentProfile?.weight_kg||0);if(!h||!w){card.classList.add('hidden');return}card.classList.remove('hidden');const bmi=w/(h*h),bodyW=Math.max(18,Math.min(34,18+(bmi-20)*0.45));document.getElementById('bodyAvatar').innerHTML=`<svg viewBox="0 0 74 100" role="img" aria-label="Avatar ilustrativo baseado nas medidas"><circle cx="37" cy="12" r="9" fill="#ffbf91"/><path d="M${37-bodyW/2} 25 Q37 20 ${37+bodyW/2} 25 L${42+bodyW/2} 54 L${39+bodyW/2/2} 55 L${37+bodyW/2/2} 40 L${37+bodyW/2/2} 69 L${43+bodyW/2/2} 96 L37 96 L34 71 L31 96 L24 96 L${37-bodyW/2/2} 69 L${37-bodyW/2/2} 40 L${35-bodyW/2} 55 L${32-bodyW/2} 54 Z" fill="${profile==='mulher'?'#ff72b5':'#8cff2f'}" stroke="#dce4eb" stroke-width=".8"/></svg>`;document.getElementById('avatarTitle').textContent='Avatar ilustrativo';document.getElementById('avatarInfo').textContent=`${h*100} cm · ${w} kg · IMC aproximado ${bmi.toFixed(1)}. Ilustração, não avaliação médica.`}
+function backToPersonal(){selectedStudentId=null;selectedStudentProfile=null;document.getElementById('app').classList.add('hidden');if(currentProfile?.role==='admin'){showAdmin();return}showPersonalDashboard()}
 sb.auth.onAuthStateChange((event,session)=>{if(session&&!currentUser)startSession(session.user)});
 (async()=>{const {data}=await sb.auth.getSession();if(data.session)await startSession(data.session.user);else document.getElementById('auth').classList.remove('hidden')})();
 </script><script>
